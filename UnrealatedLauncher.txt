@@ -1,1 +1,1 @@
-./Debug/src_UnrealatedLauncher.cpp.o ./Debug/src_UnrealatedLauncherWindow.cpp.o
+./Debug/src_UnrealatedLauncher.cpp.o ./Debug/src_UnrealatedLauncherWindow.cpp.o ./Debug/src_LauncherSettings.cpp.o ./Debug/src_LauncherMainButtons.cpp.o ./Debug/src_Project_Tab.cpp.o

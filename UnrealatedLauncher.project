@@ -9,10 +9,19 @@
   <Dependencies/>
   <VirtualDirectory Name="headers">
     <File Name="headers/UnrealatedLauncherWindow.h"/>
+    <File Name="headers/LauncherSettings.h"/>
+    <File Name="headers/Engines_Tab.h"/>
+    <File Name="headers/Projects_Tab.h"/>
+    <File Name="headers/LauncherMainButtons.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src">
     <File Name="src/UnrealatedLauncher.cpp"/>
     <File Name="src/UnrealatedLauncherWindow.cpp"/>
+    <VirtualDirectory Name="MainWindowTabs">
+      <File Name="src/Project_Tab.cpp"/>
+    </VirtualDirectory>
+    <File Name="src/LauncherSettings.cpp"/>
+    <File Name="src/LauncherMainButtons.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
