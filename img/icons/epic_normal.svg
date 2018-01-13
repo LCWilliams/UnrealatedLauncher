@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="75"
+   height="60"
+   viewBox="0 0 19.84375 15.875"
+   version="1.1"
+   id="svg3792"
+   inkscape:version="0.92.2 (unknown)"
+   sodipodi:docname="epic_normal.svg">
+  <defs
+     id="defs3786" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="17.327194"
+     inkscape:cy="25.436366"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:pagecheckerboard="true"
+     showguides="false"
+     inkscape:snap-page="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1026"
+     inkscape:window-x="1920"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     units="px" />
+  <metadata
+     id="metadata3789">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-281.125)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.23369956px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.08084249"
+       x="10.134181"
+       y="278.03226"
+       id="text3798"
+       transform="scale(0.95110448,1.0514092)"><tspan
+         sodipodi:role="line"
+         x="10.134181"
+         y="278.03226"
+         style="font-size:7.97594547px;text-align:center;text-anchor:middle;fill:#cccccc;stroke-width:0.08084249"
+         id="tspan3800">EPIC</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3802"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,0,237)"><flowRegion
+         id="flowRegion3804"><rect
+           id="rect3806"
+           width="61.114227"
+           height="41.416256"
+           x="162.63457"
+           y="110.60411" /></flowRegion><flowPara
+         id="flowPara3808" /></flowRoot>    <rect
+       style="opacity:0.8;fill:none;fill-opacity:0.95336788;stroke:#666666;stroke-width:1.16872263;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect7576"
+       width="17.53084"
+       height="14.024673"
+       x="1.1564547"
+       y="282.05017" />
+  </g>
+</svg>

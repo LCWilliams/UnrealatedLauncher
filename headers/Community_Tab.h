@@ -1,5 +1,5 @@
-#ifndef ENGINES_TAB
-#define ENGINES_TAB
+#ifndef COMMUNITY_TAB
+#define COMMUNITY_TAB
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/buttonbox.h>
@@ -11,17 +11,15 @@
 
 namespace UnrealatedLauncher{
 	
-	class EngineTabContainer : public Gtk::Grid{
+	class CommunityTabContainer : public Gtk::Grid{
 	// THE CONTAINER USED TO HOUSE ALL ELEMENTS PERTAINING TO ENGINES.
 
 	public:
-		EngineTabContainer();
-		virtual ~EngineTabContainer();
-		
-	void launchEngine();
+		CommunityTabContainer();
+		virtual ~CommunityTabContainer();
 
 	protected:
-	Gtk::ScrolledWindow v_EngineScrolledWindow;
+	Gtk::ScrolledWindow v_CommunityScrolledWindow;
 //	Gtk::Grid v_EngineBlockGrid; // Grid placed inside the scrolled window to house engine blocks; allows for easier filtering.
 
 	//Toolbar Buttons:
@@ -34,7 +32,6 @@ namespace UnrealatedLauncher{
 	// FUNCTIONS:
 	void createExisting(); // Creates all existing
 	void installEngine(); // Engine Installer
-
 
 	
 	}; // END - EngineTabContainer Class
