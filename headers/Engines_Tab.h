@@ -1,3 +1,5 @@
+// DEPRECATED: DON'T USE
+
 #ifndef ENGINES_TAB
 #define ENGINES_TAB
 #include <gtkmm/grid.h>
@@ -21,7 +23,7 @@ namespace UnrealatedLauncher{
 	void launchEngine();
 
 	protected:
-	Gtk::ScrolledWindow v_EngineScrolledWindow;
+	Gtk::ScrolledWindow v_EngineScrolledWindow; // Wrapped around Flowbox.
 //	Gtk::Grid v_EngineBlockGrid; // Grid placed inside the scrolled window to house engine blocks; allows for easier filtering.
 
 	//Toolbar Buttons:

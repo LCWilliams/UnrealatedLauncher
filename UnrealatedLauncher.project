@@ -5,6 +5,15 @@
       <![CDATA[00020001N0005Debug0000000000000001N0007Release000000000000]]>
     </Plugin>
   </Plugins>
+  <Reconciliation>
+    <Regexes/>
+    <Excludepaths/>
+    <Ignorefiles/>
+    <Extensions>
+      <![CDATA[cpp;c;h;hpp;xrc;wxcp;fbp]]>
+    </Extensions>
+    <Topleveldir>../UnrealatedLauncher</Topleveldir>
+  </Reconciliation>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="headers">
@@ -12,16 +21,22 @@
     <File Name="headers/LauncherSettings.h"/>
     <File Name="headers/Engines_Tab.h"/>
     <File Name="headers/Projects_Tab.h"/>
-    <File Name="headers/LauncherMainButtons.h"/>
+    <File Name="headers/Engines_Block.h"/>
+    <File Name="headers/Community_Tab.h"/>
+    <File Name="headers/LauncherMainPages.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src">
     <File Name="src/UnrealatedLauncher.cpp"/>
     <File Name="src/UnrealatedLauncherWindow.cpp"/>
     <VirtualDirectory Name="MainWindowTabs">
       <File Name="src/Project_Tab.cpp"/>
+      <File Name="src/Engines_Tab.cpp"/>
+      <File Name="src/Community_Tab.cpp"/>
+      <File Name="src/Market_Tab.cpp"/>
     </VirtualDirectory>
     <File Name="src/LauncherSettings.cpp"/>
-    <File Name="src/LauncherMainButtons.cpp"/>
+    <File Name="src/Engines_Block.cpp"/>
+    <File Name="src/Engines_BlockOptions.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

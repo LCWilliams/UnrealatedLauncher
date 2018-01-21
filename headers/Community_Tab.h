@@ -1,3 +1,5 @@
+// DEPRECATED: DON'T USE
+
 #ifndef COMMUNITY_TAB
 #define COMMUNITY_TAB
 #include <gtkmm/grid.h>

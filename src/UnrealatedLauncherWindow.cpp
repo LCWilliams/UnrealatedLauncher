@@ -1,6 +1,5 @@
 #include <headers/UnrealatedLauncherWindow.h>
 #include <iostream>
-#include <gtkmm.h>
 
 using namespace std;
 using namespace UnrealatedLauncher;
@@ -15,9 +14,11 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	v_MainWindowGrid->set_column_homogeneous(false);
 	add(*v_MainWindowGrid); // Add to window
 	
-	// CREATE ALL WINDOWS, SET GTK TO MANAGE:
-	UnrealatedLauncher::ProjectTabContainer *v_ProjectsWindow = Gtk::manage(new UnrealatedLauncher::ProjectTabContainer);
-	UnrealatedLauncher::EngineTabContainer *v_EngineWindow = Gtk::manage(new UnrealatedLauncher::EngineTabContainer);
+	// CREATE ALL WINDOWS, SET GTK TO MANAGE:	
+	UnrealatedLauncher::Launcher_ProjectTab *v_ProjectTab = Gtk::manage(new UnrealatedLauncher::Launcher_ProjectTab);
+	UnrealatedLauncher::Launcher_EngineTab *v_EngineTab = Gtk::manage(new UnrealatedLauncher::Launcher_EngineTab);
+	UnrealatedLauncher::Launcher_MarketTab *v_MarketTab = Gtk::manage(new UnrealatedLauncher::Launcher_MarketTab);
+	UnrealatedLauncher::Launcher_CommunityTab *v_CommunityTab = Gtk::manage(new UnrealatedLauncher::Launcher_CommunityTab);
 
 // MAIN BAR:
 		// Grid Container for Button Layout management: 
@@ -30,26 +31,12 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	v_MainButtonBox->set_hexpand(true);
 	v_MainButtonBox->set_size_request(-1, 60);
 	v_MainButtonBox->set_layout(Gtk::ButtonBoxStyle::BUTTONBOX_EXPAND);
-
-		// Add label to Projects, Engines, Market, Community, Launcher buttons:
-	btn_Projects.add_label("PROJECTS");
-	btn_Engines.add_label("ENGINES");
-	btn_Market.add_label("MARKET");
-	btn_Community.add_label("COMMUNITY");
-	btn_Launcher.add_label("LAUNCHER");
+	
+	Gtk::StackSwitcher *v_MainButtonSwitcher = Gtk::manage(new Gtk::StackSwitcher);
+	v_MainButtonSwitcher->set_homogeneous(); // <- This bitch.
 	
 		// Add buttons to Contianer
-	v_MainButtonBox->add(btn_Projects);
-	v_MainButtonBox->add(btn_Engines);
-	v_MainButtonBox->add(btn_Market);
-	v_MainButtonBox->add(btn_Community);
-
-		// Button Bindings:
-	btn_Projects.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::btn_ProjectsClicked));
-	btn_Engines.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::btn_EnginesClicked));
-	btn_Market.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::btn_MarketClicked));
-	btn_Community.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::btn_CommunityClicked));
-	
+	v_LauncherButtonGrid->attach(*v_MainButtonSwitcher, 0, 0, 4, 1);
 		// Progress Bars:
 	v_LauncherButtonGrid->attach(v_ProjectsProgressBar, 0, 1, 1, 1);
 	v_LauncherButtonGrid->attach(v_EnginesProgressBar, 1, 1, 1, 1);
@@ -90,12 +77,16 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 // END -- MAIN MENU BAR
 
 // LAUNCHER TAB STACK
+	
+	v_MainButtonSwitcher->set_stack(v_LauncherPageStack);
+	v_MainWindowGrid->set_hexpand(true);
+	
 	v_MainWindowGrid->attach(v_LauncherPageStack, 1, 2, 1, 1);
 	v_LauncherPageStack.set_transition_type(Gtk::STACK_TRANSITION_TYPE_CROSSFADE);
-	v_LauncherPageStack.add(*v_ProjectsWindow, "Projects", "PROJECTS");
-	v_LauncherPageStack.add(*v_EngineWindow, "Engines", "ENGINES");
-	// Market Page
-	// Community Page
+	v_LauncherPageStack.add(*v_ProjectTab, "Projects", "PROJECTS");
+	v_LauncherPageStack.add(*v_EngineTab, "Engines", "ENGINES");
+	v_LauncherPageStack.add(*v_MarketTab, "Market", "MARKET");
+	v_LauncherPageStack.add(*v_CommunityTab, "Community", "COMMUNITY");
 // END TAB STACK
 
 // UTILITY BAR
@@ -104,10 +95,11 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	// Settings:
 	v_UtilityBar.set_size_request(300, -1);
 	v_UtilityBar.set_vexpand();
+	v_UtilityBar.set_hexpand(false);
 	
 	// QuicKLaunch Button
 	v_UtilityBar.attach(btn_QuickLaunch, 0, 0, 1, 1);
-	btn_QuickLaunch.set_size_request(-1, 50);
+	btn_QuickLaunch.set_size_request(-1, 80);
 	btn_QuickLaunch.set_hexpand();
 	btn_QuickLaunch.set_border_width(10);
 	btn_QuickLaunch.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_QuickLaunch_clicked));
@@ -164,22 +156,6 @@ void UnrealatedLauncher::UnrealatedLauncherWindow::On_AboutWindow_Close(int p_re
 } // END - onAboutWindowClose
 
 // BUTTON FUNCTIONS
-void UnrealatedLauncherWindow::btn_ProjectsClicked(){
-	updateMainWindow(1); 
-} // END - Projects Button Clicked
-
-void UnrealatedLauncherWindow::btn_EnginesClicked(){
-	updateMainWindow(2);
-} // END - Engine button Clicked.
-
-void UnrealatedLauncherWindow::btn_MarketClicked(){
-	updateMainWindow(3);
-} // END - Market button clicked.
-
-void UnrealatedLauncherWindow::btn_CommunityClicked(){
-	updateMainWindow(4);
-} // END - Community Button Clicked
-
 
 void UnrealatedLauncherWindow::on_ToggleUtilityBar_Clicked(){
 		// If bool is true, show...
@@ -192,71 +168,9 @@ void UnrealatedLauncherWindow::on_ToggleUtilityBar_Clicked(){
 
 
 void UnrealatedLauncherWindow::on_QuickLaunch_clicked(){
-	
+	// Grab quicklaunch engine and run.
 } // END - On Quicklaunch Clicked.
 // END -- Button Functions
-
-void UnrealatedLauncherWindow::toggleMainButtons(bool p_Enable){
-// Disable, or Enable all the main buttons.
-	if(p_Enable){
-		btn_Projects.set_sensitive(true);
-		btn_Projects.set_state_flags(Gtk::STATE_FLAG_NORMAL);
-		btn_Engines.set_sensitive(true);
-		btn_Engines.set_state_flags(Gtk::STATE_FLAG_NORMAL);
-		btn_Market.set_sensitive(true);
-		btn_Market.set_state_flags(Gtk::STATE_FLAG_NORMAL);
-		btn_Community.set_sensitive(true);
-		btn_Community.set_state_flags(Gtk::STATE_FLAG_NORMAL);
-	} else{
-		UnrealatedLauncherWindow::btn_Projects.set_sensitive(false);
-		UnrealatedLauncherWindow::btn_Engines.set_sensitive(false);
-		UnrealatedLauncherWindow::btn_Market.set_sensitive(false);
-		UnrealatedLauncherWindow::btn_Community.set_sensitive(false);
-	} // END - If/Else
-} // END - Toggle Main Button
-
-void UnrealatedLauncherWindow::updateMainWindow(int p_NewPage){
-	// Enable Main Buttons
-	toggleMainButtons(true);
-	
-	switch (p_NewPage){
-		// ORDER OF OPERATION:
-		// Button sensitive: Disable button from being pressed repeatedly.
-		// SEMIOTIC: Show the current "tab" using button state flag
-		// Show the window
-		case 0:
-		break;
-		case 1: // Projects
-			v_LauncherPageStack.set_visible_child("Projects");
-			
-			btn_Projects.set_sensitive(false); 
-			btn_Projects.set_state_flags(Gtk::STATE_FLAG_CHECKED);
-		break;
-		
-		case 2: // Engines
-		v_LauncherPageStack.set_visible_child("Engines");
-
-			btn_Engines.set_sensitive(false);
-			btn_Engines.set_state_flags(Gtk::STATE_FLAG_CHECKED);
-		break;
-		
-		case 3: // Market
-
-
-			btn_Market.set_sensitive(false);
-			btn_Market.set_state_flags(Gtk::STATE_FLAG_CHECKED);
-		break;
-		
-		case 4: // Community
-
-
-			btn_Community.set_sensitive(false);
-			btn_Community.set_state_flags(Gtk::STATE_FLAG_CHECKED);
-		break;
-		
-		default: std::cout << "NOPE!";
-	} // END - NewPage Case
-} // END - Update Main Window
 
 
 

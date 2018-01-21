@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Lee Williams
-Date                   :=13/12/17
+Date                   :=21/01/18
 CodeLitePath           :=/home/lee/.codelite
 LinkerName             :=/usr/bin/g++
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -60,7 +60,7 @@ AS       := /usr/bin/as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/src_UnrealatedLauncher.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_UnrealatedLauncherWindow.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_LauncherSettings.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_LauncherMainButtons.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_Project_Tab.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/src_UnrealatedLauncher.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_UnrealatedLauncherWindow.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_LauncherSettings.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_Engines_Block.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_Project_Tab.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_Engines_Tab.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_Community_Tab.cpp$(ObjectSuffix) $(IntermediateDirectory)/src_Market_Tab.cpp$(ObjectSuffix) 
 
 
 
@@ -115,13 +115,21 @@ $(IntermediateDirectory)/src_LauncherSettings.cpp$(DependSuffix): src/LauncherSe
 $(IntermediateDirectory)/src_LauncherSettings.cpp$(PreprocessSuffix): src/LauncherSettings.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_LauncherSettings.cpp$(PreprocessSuffix) src/LauncherSettings.cpp
 
-$(IntermediateDirectory)/src_LauncherMainButtons.cpp$(ObjectSuffix): src/LauncherMainButtons.cpp $(IntermediateDirectory)/src_LauncherMainButtons.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/1TB/Projects/UnrealatedLauncher/src/LauncherMainButtons.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_LauncherMainButtons.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/src_LauncherMainButtons.cpp$(DependSuffix): src/LauncherMainButtons.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_LauncherMainButtons.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/src_LauncherMainButtons.cpp$(DependSuffix) -MM src/LauncherMainButtons.cpp
+$(IntermediateDirectory)/src_Engines_Block.cpp$(ObjectSuffix): src/Engines_Block.cpp $(IntermediateDirectory)/src_Engines_Block.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/1TB/Projects/UnrealatedLauncher/src/Engines_Block.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_Engines_Block.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_Engines_Block.cpp$(DependSuffix): src/Engines_Block.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_Engines_Block.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/src_Engines_Block.cpp$(DependSuffix) -MM src/Engines_Block.cpp
 
-$(IntermediateDirectory)/src_LauncherMainButtons.cpp$(PreprocessSuffix): src/LauncherMainButtons.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_LauncherMainButtons.cpp$(PreprocessSuffix) src/LauncherMainButtons.cpp
+$(IntermediateDirectory)/src_Engines_Block.cpp$(PreprocessSuffix): src/Engines_Block.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_Engines_Block.cpp$(PreprocessSuffix) src/Engines_Block.cpp
+
+$(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(ObjectSuffix): src/Engines_BlockOptions.cpp $(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/1TB/Projects/UnrealatedLauncher/src/Engines_BlockOptions.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(DependSuffix): src/Engines_BlockOptions.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(DependSuffix) -MM src/Engines_BlockOptions.cpp
+
+$(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(PreprocessSuffix): src/Engines_BlockOptions.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_Engines_BlockOptions.cpp$(PreprocessSuffix) src/Engines_BlockOptions.cpp
 
 $(IntermediateDirectory)/src_Project_Tab.cpp$(ObjectSuffix): src/Project_Tab.cpp $(IntermediateDirectory)/src_Project_Tab.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/1TB/Projects/UnrealatedLauncher/src/Project_Tab.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_Project_Tab.cpp$(ObjectSuffix) $(IncludePath)
@@ -130,6 +138,30 @@ $(IntermediateDirectory)/src_Project_Tab.cpp$(DependSuffix): src/Project_Tab.cpp
 
 $(IntermediateDirectory)/src_Project_Tab.cpp$(PreprocessSuffix): src/Project_Tab.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_Project_Tab.cpp$(PreprocessSuffix) src/Project_Tab.cpp
+
+$(IntermediateDirectory)/src_Engines_Tab.cpp$(ObjectSuffix): src/Engines_Tab.cpp $(IntermediateDirectory)/src_Engines_Tab.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/1TB/Projects/UnrealatedLauncher/src/Engines_Tab.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_Engines_Tab.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_Engines_Tab.cpp$(DependSuffix): src/Engines_Tab.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_Engines_Tab.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/src_Engines_Tab.cpp$(DependSuffix) -MM src/Engines_Tab.cpp
+
+$(IntermediateDirectory)/src_Engines_Tab.cpp$(PreprocessSuffix): src/Engines_Tab.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_Engines_Tab.cpp$(PreprocessSuffix) src/Engines_Tab.cpp
+
+$(IntermediateDirectory)/src_Community_Tab.cpp$(ObjectSuffix): src/Community_Tab.cpp $(IntermediateDirectory)/src_Community_Tab.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/1TB/Projects/UnrealatedLauncher/src/Community_Tab.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_Community_Tab.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_Community_Tab.cpp$(DependSuffix): src/Community_Tab.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_Community_Tab.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/src_Community_Tab.cpp$(DependSuffix) -MM src/Community_Tab.cpp
+
+$(IntermediateDirectory)/src_Community_Tab.cpp$(PreprocessSuffix): src/Community_Tab.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_Community_Tab.cpp$(PreprocessSuffix) src/Community_Tab.cpp
+
+$(IntermediateDirectory)/src_Market_Tab.cpp$(ObjectSuffix): src/Market_Tab.cpp $(IntermediateDirectory)/src_Market_Tab.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/1TB/Projects/UnrealatedLauncher/src/Market_Tab.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_Market_Tab.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_Market_Tab.cpp$(DependSuffix): src/Market_Tab.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_Market_Tab.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/src_Market_Tab.cpp$(DependSuffix) -MM src/Market_Tab.cpp
+
+$(IntermediateDirectory)/src_Market_Tab.cpp$(PreprocessSuffix): src/Market_Tab.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_Market_Tab.cpp$(PreprocessSuffix) src/Market_Tab.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

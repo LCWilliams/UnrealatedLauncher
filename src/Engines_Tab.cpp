@@ -1,8 +1,91 @@
-#include <headers/Engines_Tab.h>
+#include <headers/LauncherMainPages.h>
 #include <headers/Engines_Block.h>
 
 using namespace UnrealatedLauncher;
 
+Launcher_EngineTab::Launcher_EngineTab(){
+	// Configuration of container grid:
+	set_row_homogeneous(false);
+	set_column_homogeneous(false);
+	set_hexpand();
+	set_vexpand();
+
+// ATTACHMENT: main window
+	v_FlowboxScrolledWindowWrapper.add(v_EngineFlowBox);
+	attach(v_FlowboxScrolledWindowWrapper, 0, 1, 1, 1);
+	attach(v_EnginesToolbar, 0, 2, 1, 1);
+	v_EnginesToolbar.set_hexpand();
+
+
+// ATTACHMENT: Toolbar
+	v_EnginesToolbar.pack_end(btn_EnginesTabOptions);
+	v_EnginesToolbar.pack_end(btn_Filter);
+	v_EnginesToolbar.pack_end(btn_EnginesSearchEntry);
+	// Toolbar, left side:
+	v_EnginesToolbar.pack_start(btn_AddEngine);
+
+// FLOWBOX & SCROLL WINDOW: settings
+	v_EngineFlowBox.set_column_spacing(10);
+	v_EngineFlowBox.set_row_spacing(15);
+	v_EngineFlowBox.set_valign(Gtk::ALIGN_START);
+	v_EngineFlowBox.set_halign(Gtk::ALIGN_START);
+	v_EngineFlowBox.set_min_children_per_line(3);
+	
+	v_FlowboxScrolledWindowWrapper.set_min_content_height(400);
+	v_FlowboxScrolledWindowWrapper.set_min_content_width(1000);
+	v_FlowboxScrolledWindowWrapper.set_margin_start(10);
+	v_FlowboxScrolledWindowWrapper.set_margin_end(10);
+	v_FlowboxScrolledWindowWrapper.set_hexpand();
+	v_FlowboxScrolledWindowWrapper.set_vexpand();
+
+
+
+// BUTTONS, LABELS & ICONS
+	btn_AddEngine.add_label("ADD ENGINE", true, Gtk::ALIGN_CENTER);
+	auto *filterIcon = Gtk::manage(new Gtk::Image("../img/icon/filter.svg"));
+	btn_Filter.set_image(*filterIcon);
+	btn_Filter.set_always_show_image();
+	
+
+// DEBUG TESTING:
+	EngineBlock *testBlock = Gtk::manage(new EngineBlock("", "", "", "", 1, 0));
+	EngineBlock *testBlock2 = Gtk::manage(new EngineBlock("/mnt/test", "/mnt/test/source", "", "MAH FANCY AWESOME VERSION", 17, 2));
+	EngineBlock *testBlock3 = Gtk::manage(new EngineBlock("", "", "", "", 2, 3));
+	EngineBlock *testBlock4 = Gtk::manage(new EngineBlock("", "", "", "", 5, 0));
+	EngineBlock *testBlock5 = Gtk::manage(new EngineBlock("", "", "", "", 3, 0));
+	EngineBlock *testBlock6 = Gtk::manage(new EngineBlock("", "", "", "GARBLE GARBLE GARBLE GARBLE GARBLE", 5, 0));
+	EngineBlock *testBlock7 = Gtk::manage(new EngineBlock("", "", "", "VEEEEERY LOOOOOOONG NAAAAAAME TOOOO TEEEEEEESSSSSSTTTTT", 1, 0));
+	EngineBlock *testBlock8 = Gtk::manage(new EngineBlock("", "", "", "", 1, 0));
+	EngineBlock *testBlock9 = Gtk::manage(new EngineBlock("", "", "/home/lee/Pictures/test.jpg", "", 1, 2));
+	EngineBlock *testBlock10 = Gtk::manage(new EngineBlock("", "", "/home/lee/Pictures/test.jpg", "Fancy Awesome Version with Image", 1, 3));
+	EngineBlock *testBlock11 = Gtk::manage(new EngineBlock("", "", "/home/lee/Pictures/doesn'texist.jpeg", "Awesome version with broken image", 17, 0));
+	EngineBlock *testBlock12 = Gtk::manage(new EngineBlock("", "", "/home/lee/Pictures/huehu.png", "", 1, 0));
+	EngineBlock *testBlock13 = Gtk::manage(new EngineBlock("", "", "", "", 1, 0));
+	v_EngineFlowBox.add(*testBlock);
+	v_EngineFlowBox.add(*testBlock2);
+	v_EngineFlowBox.add(*testBlock3);
+	v_EngineFlowBox.add(*testBlock4);
+	v_EngineFlowBox.add(*testBlock5);
+	v_EngineFlowBox.add(*testBlock6);
+	v_EngineFlowBox.add(*testBlock7);
+	v_EngineFlowBox.add(*testBlock8);
+	v_EngineFlowBox.add(*testBlock9);
+	v_EngineFlowBox.add(*testBlock10);
+	v_EngineFlowBox.add(*testBlock11);
+	v_EngineFlowBox.add(*testBlock12);
+	v_EngineFlowBox.add(*testBlock13);
+// END DEBUG TESTING.
+} // END - EngineTab Constructor.
+
+Launcher_EngineTab::~Launcher_EngineTab(){
+} // END - Destructor.
+
+// FUNCTIONS:
+
+
+
+// LEGACY CODE:
+/*
 EngineTabContainer::EngineTabContainer(){
 // Configuration of EnginesTabContainer:
 //	set_row_spacing(0);
@@ -76,3 +159,4 @@ EngineTabContainer::~EngineTabContainer(){
 void EngineTabContainer::launchEngine(){
 	
 } // END - Launch enigne.
+*/
