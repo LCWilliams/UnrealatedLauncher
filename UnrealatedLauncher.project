@@ -5,55 +5,68 @@
       <![CDATA[00020001N0005Debug0000000000000001N0007Release000000000000]]>
     </Plugin>
   </Plugins>
+  <VirtualDirectory Name="libraries">
+    <File Name="libraries/libgit2.a"/>
+  </VirtualDirectory>
   <Reconciliation>
     <Regexes/>
     <Excludepaths/>
     <Ignorefiles/>
     <Extensions>
-      <![CDATA[cpp;c;h;hpp;xrc;wxcp;fbp]]>
+      <![CDATA[*.cpp;*.c;*.h;*.hpp;*.xrc;*.wxcp;*.fbp]]>
     </Extensions>
-    <Topleveldir>../UnrealatedLauncher</Topleveldir>
+    <Topleveldir>/home/lee/1TB_DATA/Projects/UnrealatedLauncher</Topleveldir>
   </Reconciliation>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="headers">
+    <VirtualDirectory Name="external">
+      <File Name="headers/external/git2.h"/>
+    </VirtualDirectory>
+    <File Name="headers/Launcher_Marketplace.h"/>
+    <File Name="headers/Launcher_Community.h"/>
+    <File Name="headers/Launcher_Projects.h"/>
+    <File Name="headers/Launcher_Engines.h" ExcludeProjConfig=""/>
     <File Name="headers/UnrealatedLauncherWindow.h"/>
-    <File Name="headers/LauncherSettings.h"/>
-    <File Name="headers/Engines_Tab.h"/>
-    <File Name="headers/Projects_Tab.h"/>
-    <File Name="headers/Engines_Block.h"/>
-    <File Name="headers/Community_Tab.h"/>
     <File Name="headers/LauncherMainPages.h"/>
+    <File Name="headers/AccountManager.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src">
+    <File Name="src/UnrealatedLauncherSettings.cpp"/>
     <File Name="src/UnrealatedLauncher.cpp"/>
     <File Name="src/UnrealatedLauncherWindow.cpp"/>
     <VirtualDirectory Name="MainWindowTabs">
       <File Name="src/Project_Tab.cpp"/>
-      <File Name="src/Engines_Tab.cpp"/>
       <File Name="src/Community_Tab.cpp"/>
       <File Name="src/Market_Tab.cpp"/>
+      <VirtualDirectory Name="Engines">
+        <File Name="src/Engines_SidebarAdd.cpp" ExcludeProjConfig=""/>
+        <File Name="src/Engines_Tab.cpp" ExcludeProjConfig=""/>
+        <File Name="src/Engines_Block.cpp"/>
+        <VirtualDirectory Name="Assistants"/>
+      </VirtualDirectory>
     </VirtualDirectory>
-    <File Name="src/LauncherSettings.cpp"/>
-    <File Name="src/Engines_Block.cpp"/>
-    <File Name="src/Engines_BlockOptions.cpp"/>
+    <File Name="src/AccountManager.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
-      <Compiler Options="" C_Options="" Assembler="">
+      <Compiler Options="-std=c++17" C_Options="" Assembler="">
         <IncludePath Value="."/>
+        <IncludePath Value="headers/external"/>
       </Compiler>
-      <Linker Options="">
-        <LibraryPath Value="."/>
+      <Linker Options="-pthread;-lstdc++;">
+        <LibraryPath Value="/libraries"/>
+        <LibraryPath Value="/lib/x86_64-linux-gnu"/>
+        <Library Value="libgit2"/>
+        <Library Value="libssl"/>
       </Linker>
       <ResourceCompiler Options=""/>
     </GlobalSettings>
-    <Configuration Name="Debug" CompilerType="GCC" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g;-Wall;-O0;$(shell pkg-config --cflags gtkmm-3.0)" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+    <Configuration Name="Debug" CompilerType="GCC_7.3" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g;-O0;-Wall;$(shell pkg-config --cflags gtkmm-3.0);" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
-        <IncludePath Value="headers/"/>
       </Compiler>
-      <Linker Options="$(shell pkg-config --libs gtkmm-3.0)" Required="yes"/>
+      <Linker Options="$(shell pkg-config --libs gtkmm-3.0);" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>
@@ -81,24 +94,22 @@
         <CustomPostBuild/>
         <CustomPreBuild/>
       </AdditionalRules>
-      <Completion EnableCpp11="no" EnableCpp14="no">
+      <Completion EnableCpp11="yes" EnableCpp14="yes">
         <ClangCmpFlagsC/>
         <ClangCmpFlags/>
         <ClangPP/>
         <SearchPaths/>
       </Completion>
     </Configuration>
-    <Configuration Name="Release" CompilerType="GCC" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-O2;-Wall;$(shell pkg-config --cflags gtkmm-3.0)" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+    <Configuration Name="Release" CompilerType="GCC_7.3" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-O2;-std=c++17;-Wall;$(shell pkg-config --cflags gtkmm-3.0)" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
-        <IncludePath Value="../headers"/>
-        <IncludePath Value="../include"/>
         <Preprocessor Value="NDEBUG"/>
       </Compiler>
       <Linker Options="$(shell pkg-config --libs gtkmm-3.0)" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
-      <BuildSystem Name="Default"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="yes" IsEnabled="yes"/>
+      <BuildSystem Name="GNU makefile onestep build"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>

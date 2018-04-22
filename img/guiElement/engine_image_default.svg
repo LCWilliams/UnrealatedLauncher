@@ -12,8 +12,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="300"
-   height="175"
-   viewBox="0 0 79.374997 46.302085"
+   height="176"
+   viewBox="0 0 79.374997 46.566668"
    version="1.1"
    id="svg45"
    inkscape:version="0.92.2 (unknown)"
@@ -22,16 +22,39 @@
      id="defs39">
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient6063">
+       id="linearGradient1540">
       <stop
-         style="stop-color:#001453;stop-opacity:1"
+         style="stop-color:#002c66;stop-opacity:0.5"
          offset="0"
-         id="stop6059" />
+         id="stop1536" />
       <stop
-         style="stop-color:#003bca;stop-opacity:1"
+         id="stop1546"
+         offset="0.06428572"
+         style="stop-color:#002a8f;stop-opacity:0.93333334" />
+      <stop
+         style="stop-color:#002887;stop-opacity:0.88235294;"
+         offset="0.08333334"
+         id="stop2074" />
+      <stop
+         id="stop2076"
+         offset="0.17142858"
+         style="stop-color:#002450;stop-opacity:0.92131978" />
+      <stop
+         style="stop-color:#001201;stop-opacity:0"
+         offset="0.59523809"
+         id="stop2072" />
+      <stop
+         style="stop-color:#0a0041;stop-opacity:0.82487309"
          offset="1"
-         id="stop6061" />
+         id="stop1538" />
     </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 23.151042 : 1"
+       inkscape:vp_y="0 : 999.99999 : 0"
+       inkscape:vp_z="79.469491 : -0.094494562 : 1"
+       inkscape:persp3d-origin="39.687498 : 15.434028 : 1"
+       id="perspective1458" />
     <linearGradient
        id="linearGradient6047"
        osb:paint="solid">
@@ -42,14 +65,14 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient6063"
-       id="linearGradient6065"
-       x1="0.1889881"
-       y1="260.80875"
-       x2="132.85863"
-       y2="260.80875"
+       xlink:href="#linearGradient1540"
+       id="linearGradient1544"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.59829058,0,0,0.63824288,0.0759183,107.57859)" />
+       x1="0"
+       y1="273.18747"
+       x2="79.375"
+       y2="273.18747"
+       gradientTransform="translate(0,-2.0617674e-6)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -58,18 +81,22 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="201.69676"
-     inkscape:cy="87.393991"
+     inkscape:zoom="2.8"
+     inkscape:cx="138.24278"
+     inkscape:cy="116.56795"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     showgrid="false"
+     inkscape:current-layer="layer2"
+     showgrid="true"
      units="px"
      inkscape:window-width="1920"
      inkscape:window-height="1026"
      inkscape:window-x="1920"
      inkscape:window-y="27"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1532" />
+  </sodipodi:namedview>
   <metadata
      id="metadata42">
     <rdf:RDF>
@@ -86,13 +113,51 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-250.6979)">
+     transform="translate(0,-250.43332)">
     <rect
-       style="fill:url(#linearGradient6065);fill-opacity:1;stroke-width:0.16349767"
-       id="rect105"
-       width="79.374992"
-       height="46.680058"
-       x="0.1889881"
-       y="250.69789" />
+       style="opacity:1;fill:url(#linearGradient1544);fill-opacity:1;fill-rule:evenodd;stroke-width:0.26458332"
+       id="rect1534"
+       width="79.375"
+       height="46.302082"
+       x="0"
+       y="250.69792" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Unrealated">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.33089304px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:0.13451777;stroke:none;stroke-width:0.13534041"
+       x="4.1190248"
+       y="5.8121963"
+       id="text2081"><tspan
+         sodipodi:role="line"
+         id="tspan2079"
+         x="4.1190248"
+         y="5.8121963"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;fill:#ffffff;fill-opacity:0.13451777;stroke-width:0.13534041">UNREALATED</tspan></text>
+    <text
+       id="text2085"
+       y="9.8240728"
+       x="13.302837"
+       style="font-style:normal;font-weight:normal;font-size:4.33089304px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:0.13451777;stroke:none;stroke-width:0.13534041"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;fill:#ffffff;fill-opacity:0.13451777;stroke-width:0.13534041"
+         y="9.8240728"
+         x="13.302837"
+         id="tspan2083"
+         sodipodi:role="line">LAUNCHER</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:8.46666622px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:0.41624367;stroke:none;stroke-width:0.26458332"
+       x="25.135414"
+       y="27.289885"
+       id="text2089"><tspan
+         sodipodi:role="line"
+         id="tspan2087"
+         x="25.135414"
+         y="27.289885"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;fill:#ffffff;fill-opacity:0.41624367;stroke-width:0.26458332">ENGINE</tspan></text>
   </g>
 </svg>
