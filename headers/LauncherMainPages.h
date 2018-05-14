@@ -1,3 +1,8 @@
+// COPYRIGHT © 2018
+// AUTHOR(S):	Lee Connor Williams
+// All Rights Reserved
+
+
 // Header file combines the main pages for convenience.
 #ifndef LAUNCHERMAINPAGES
 #define LAUNCHERMAINPAGES

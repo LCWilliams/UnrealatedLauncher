@@ -4,7 +4,16 @@
 using namespace std;
 using namespace UnrealatedLauncher;
 
-UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
+UnrealatedLauncherWindow::UnrealatedLauncherWindow():
+
+	btn_link_help("https://docs.unrealengine.com/latest/INT/", "GIB MUNNIES PLZ"),
+	menuItem_Launcher_ToggleUtilityBar("Utility Bar"),
+	menuItem_Launcher_About("About"),
+	menuItem_Launcher_Quit("Quit"),
+	menuItem_Launcher_Settings("Settings"),
+	menuItem_Launcher_RepoManager("Repo Manager")
+
+{		// UNREALATED LAUNCHER WINDOW
 	set_default_size(1200, 800);
 	set_title("Unrealated Launcher");
 	
@@ -16,15 +25,22 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	
 	// CREATE ALL WINDOWS, SET GTK TO MANAGE:	
 	UnrealatedLauncher::Launcher_ProjectTab *v_ProjectTab = Gtk::manage(new UnrealatedLauncher::Launcher_ProjectTab);
-	v_projectsTabRef = v_ProjectTab;
+		v_projectsTabRef = v_ProjectTab;
 	UnrealatedLauncher::Launcher_EngineTab *v_EngineTab = Gtk::manage(new UnrealatedLauncher::Launcher_EngineTab);
-	v_enginesTabRef = v_EngineTab;
+		v_enginesTabRef = v_EngineTab;
 	UnrealatedLauncher::Launcher_MarketTab *v_MarketTab = Gtk::manage(new UnrealatedLauncher::Launcher_MarketTab);
-	v_marketTabRef = v_MarketTab;
+		v_marketTabRef = v_MarketTab;
 	UnrealatedLauncher::Launcher_CommunityTab *v_CommunityTab = Gtk::manage(new UnrealatedLauncher::Launcher_CommunityTab);
-	v_communityTabRef = v_CommunityTab;
-	UnrealatedSettings *v_settingsGrid = Gtk::manage(new UnrealatedSettings);
+		v_communityTabRef = v_CommunityTab;
+	
+	UnrealatedSettings *v_settingsRef = Gtk::manage(new UnrealatedSettings);
+	UnrealatedLauncherRepoManager *v_launcherRepoManagerRef = Gtk::manage(new UnrealatedLauncherRepoManager);
+	v_repoManagerRevealer.add(*v_launcherRepoManagerRef);
+	v_launcherRepoManagerRef->launcherRepoManager_setSettingsReference(v_settingsRef);
 
+
+
+	
 
 //	LAUNCHER SETTINGS : Placed here for Z ordering.
 	v_MainWindowGrid->attach(v_settingsRevealer, 1, 1, 1, 1);
@@ -32,10 +48,20 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	v_settingsRevealer.set_transition_duration(750);
 	
 	// Pass settings reference to window object;
-	v_settingsGrid->v_windowRef = this;
-	v_settingsRevealer.add(*v_settingsGrid);
+	v_settingsRef->v_windowRef = this;
+	v_settingsRevealer.add(*v_settingsRef);
 	
+//	REPO MANAGER:
+	v_MainWindowGrid->attach(v_repoManagerRevealer, 1, 2, 1, 1);
+	v_repoManagerRevealer.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
+	v_repoManagerRevealer.set_transition_duration(750);
+	v_launcherRepoManagerRef->ref_window = this;
+
+	v_MainWindowGrid->attach(v_repoManagerProgressBar, 1, 3, 1, 1);
+	v_repoManagerProgressBar.set_name("PROGRESSBAR_SPECIAL");
+
 //	END LAUNCHER SETTINGS 
+
 
 
 
@@ -62,11 +88,13 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	v_LauncherButtonGrid->attach(v_MarketProgressBar, 2, 1, 1, 1);
 	v_LauncherButtonGrid->attach(v_CommunityProgressBar, 3, 1, 1, 1);
 
-	auto img_GitStatus = Gtk::manage(new Gtk::Image("../img/icons/git_normal.svg"));
-	v_LauncherButtonGrid->attach(*img_GitStatus, 4, 0, 1, 2);
-	
-	auto img_EpicStatus = Gtk::manage(new Gtk::Image("../img/icons/epic_normal.svg"));
-	v_LauncherButtonGrid->attach(*img_EpicStatus, 5, 0, 1, 2);
+	Gtk::Separator *launcherButtonGrid_Separator = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL));
+	v_LauncherButtonGrid->attach(*launcherButtonGrid_Separator, 4, 0, 1, 2);
+//	auto img_GitStatus = Gtk::manage(new Gtk::Image("../img/icons/git_normal.svg"));
+//	v_LauncherButtonGrid->attach(*img_GitStatus, 4, 0, 1, 2);
+//	
+//	auto img_EpicStatus = Gtk::manage(new Gtk::Image("../img/icons/epic_normal.svg"));
+//	v_LauncherButtonGrid->attach(*img_EpicStatus, 5, 0, 1, 2);
 	
 	
 		// Add Main Button Box to Launcher Button Grid, then Add LBGrid to Main Window Grid
@@ -74,26 +102,35 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	v_LauncherButtonGrid->attach(btn_LauncherPageStack, 0, 0, 3, 1);
 	v_LauncherButtonGrid->attach(btn_Launcher, 6, 0, 1, 2);
 	v_MainWindowGrid->attach(*v_LauncherButtonGrid, 1, 0, 1, 1);
-	
+
+
+
+
 //LAUNCHER BUTTON MENU:
-	v_LauncherMenu.set_halign(Gtk::ALIGN_END);
-//	v_LauncherMenu.set_size_request(100, -1);
-	
-	Gtk::MenuItem *menuItem_Launcher_About = Gtk::manage(new Gtk::MenuItem("_About", true));
-	Gtk::MenuItem *menuItem_Launcher_Quit = Gtk::manage(new Gtk::MenuItem("_Quit", true));
-//	Gtk::MenuItem *menuItem_Launcher_Settings = Gtk::manage(new Gtk::MenuItem("_Settings", true));
-//	Gtk::CheckMenuItem *menuItem_Launcher_ToggleUtilityBar = Gtk::manage(new Gtk::CheckMenuItem("_Utility Bar", true));
-	menuItem_Launcher_ToggleUtilityBar.set_label("Utility Bar");
-	menuItem_Launcher_Settings.set_label("Settings");
-	v_LauncherMenu.append(menuItem_Launcher_Settings);
+//	v_LauncherMenu.set_halign(Gtk::ALIGN_END);
+
+
+	Gtk::SeparatorMenuItem *menuItem_Launcher_Separator = Gtk::manage(new Gtk::SeparatorMenuItem);
+	Gtk::SeparatorMenuItem *menuItem_Launcher_Separator1 = Gtk::manage(new Gtk::SeparatorMenuItem);
+
+
 	v_LauncherMenu.append(menuItem_Launcher_ToggleUtilityBar);
-	v_LauncherMenu.append(*menuItem_Launcher_About);
-	v_LauncherMenu.append(*menuItem_Launcher_Quit);
+
+	v_LauncherMenu.append(*menuItem_Launcher_Separator);
+
+	v_LauncherMenu.append(menuItem_Launcher_RepoManager);
+	v_LauncherMenu.append(menuItem_Launcher_Settings);
+
+	v_LauncherMenu.append(*menuItem_Launcher_Separator1);
+
+	v_LauncherMenu.append(menuItem_Launcher_About);
+	v_LauncherMenu.append(menuItem_Launcher_Quit);
 	
-	menuItem_Launcher_Quit->signal_activate().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_QuitClicked));
-	menuItem_Launcher_About->signal_activate().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_AboutClicked));
+	menuItem_Launcher_Quit.signal_activate().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_QuitClicked));
+	menuItem_Launcher_About.signal_activate().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_AboutClicked));
 	menuItem_Launcher_ToggleUtilityBar.signal_toggled().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_ToggleUtilityBar_Clicked));
 	menuItem_Launcher_Settings.signal_activate().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_Settings_Clicked));
+	menuItem_Launcher_RepoManager.signal_activate().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::menuItem_Launcher_RepoManager_clicked));
 
 	btn_Launcher.set_popup(v_LauncherMenu);
 	v_LauncherMenu.show_all();
@@ -105,7 +142,7 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	v_MainButtonSwitcher->set_stack(v_LauncherPageStack);
 	v_MainWindowGrid->set_hexpand(true);
 	
-	v_MainWindowGrid->attach(v_LauncherPageStack, 1, 2, 1, 1);
+	v_MainWindowGrid->attach(v_LauncherPageStack, 1, 5, 1, 1);
 	v_LauncherPageStack.set_transition_type(Gtk::STACK_TRANSITION_TYPE_CROSSFADE);
 	v_LauncherPageStack.add(*v_ProjectTab, "Projects", "PROJECTS");
 	v_LauncherPageStack.add(*v_EngineTab, "Engines", "ENGINES");
@@ -125,7 +162,7 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	v_UtilityBarRevealer.set_transition_duration(500);
 	
 	// Attach Revealer to main grid:
-	v_MainWindowGrid->attach(v_UtilityBarRevealer, 0, 0, 1, 3);
+	v_MainWindowGrid->attach(v_UtilityBarRevealer, 0, 0, 1, 6);
 	// Settings:
 	v_UtilityBar.set_size_request(300, -1);
 	v_UtilityBar.set_vexpand();
@@ -142,10 +179,8 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	
 	// HelpLink
 	v_UtilityBar.attach(btn_link_help, 0, 1, 1, 1);
-	btn_link_help.set_valign(Gtk::ALIGN_END);
+	btn_link_help.set_valign(Gtk::ALIGN_FILL);
 	btn_link_help.set_hexpand();
-	btn_link_help.set_label("GIB MONEH PLZ");
-	btn_link_help.set_uri("https://docs.unrealengine.com/latest/INT/");
 
 // END - UTILITY BAR
 
@@ -154,6 +189,7 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow(){
 	show_all();
 	
 	ReadPreferences();
+	v_launcherRepoManagerRef->launcherRepoManager_setup();
 	
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::launcherIdleCheck), 500);
 	
@@ -166,7 +202,8 @@ UnrealatedLauncher::UnrealatedLauncherWindow::~UnrealatedLauncherWindow(){
 															// BUTTON FUNCTIONS
 
 void UnrealatedLauncher::UnrealatedLauncherWindow::on_QuitClicked(){
-	hide();
+	ref_application->release();
+//	hide();
 }
 
 void UnrealatedLauncher::UnrealatedLauncherWindow::on_AboutClicked(){
@@ -223,7 +260,15 @@ void UnrealatedLauncherWindow::on_QuickLaunch_clicked(){
 void UnrealatedLauncherWindow::on_Settings_Clicked(){
 	v_settingsRevealer.set_reveal_child(true);
 	menuItem_Launcher_Settings.set_sensitive(false);
+	menuItem_Launcher_RepoManager.set_sensitive(false);
 //	v_settingsRef->readPreferences();
+}
+
+void UnrealatedLauncherWindow::menuItem_Launcher_RepoManager_clicked(){
+	v_repoManagerRevealer.set_reveal_child(true);
+	menuItem_Launcher_Settings.set_sensitive(false);
+	menuItem_Launcher_RepoManager.set_sensitive(false);
+//	v_launcherRepoManagerRef->launcherRepoManager_setup();
 }
 
 
@@ -234,17 +279,12 @@ void UnrealatedLauncherWindow::on_Settings_Clicked(){
 															// END -- Button Functions
 
 
-
-
-
-
 void UnrealatedLauncherWindow::ReadPreferences(){
 	CSimpleIniCaseA ini;
 	string temp_saveData;
-	string iniFileDir = "./config/UnrealatedLauncher.ini";
 //	SI_Error temp_errorCheck = ini.SetValue("EngineGeneral", "EngineDir", p_installDir.c_str());
 
-	SI_Error temp_errorCheck = ini.LoadFile(iniFileDir.c_str());
+	SI_Error temp_errorCheck = ini.LoadFile(UnrealatedLauncherGlobal::launcherConfig.c_str());
 	
 	if(temp_errorCheck < 0){
 		// File doesn't exist
@@ -255,7 +295,7 @@ void UnrealatedLauncherWindow::ReadPreferences(){
 		temp_errorCheck = ini.Save(temp_saveData);
 		if(temp_errorCheck < 0) return;
 		
-		temp_errorCheck = ini.SaveFile(iniFileDir.c_str());
+		temp_errorCheck = ini.SaveFile(UnrealatedLauncherGlobal::launcherConfig.c_str());
 		if(temp_errorCheck < 0) return;
 	}
 		// Read data:
@@ -283,8 +323,20 @@ void UnrealatedLauncherWindow::ReadPreferences(){
 
 
 void UnrealatedLauncherWindow::settings_closed(){
+	menuItem_Launcher_RepoManager.set_sensitive(true);
 	menuItem_Launcher_Settings.set_sensitive(true);
 	v_settingsRevealer.set_reveal_child(false);
+}
+
+void UnrealatedLauncherWindow::repoManager_open(){
+	v_settingsRevealer.set_reveal_child(false); // Closes the settings revealer if it was open.
+	menuItem_Launcher_RepoManager_clicked();
+}
+
+void UnrealatedLauncherWindow::repoManager_closed(){
+	menuItem_Launcher_RepoManager.set_sensitive(true);
+	menuItem_Launcher_Settings.set_sensitive(true);
+	v_repoManagerRevealer.set_reveal_child(false);
 }
 
 bool UnrealatedLauncherWindow::launcherIdleCheck(){ // Runs every full second to check and then connect LauncherIdle.
@@ -304,7 +356,7 @@ bool UnrealatedLauncherWindow::launcherIdleCheck(){ // Runs every full second to
 		return 1;
 	}
 	
-}
+} // END - launcher idle check.
 
 bool UnrealatedLauncherWindow::launcherIdle(){ // Idle Update.
 	int totalTasks = 0; // Total count.

@@ -210,6 +210,13 @@ GtkCheckButton{
 
 
 
+#LAUNCHER_REPO_MANAGER{
+	background-color: @shade1;
+	border-bottom: solid 2.5px @primary_4;
+}
+
+
+
 /*SOURCE BLOCK:*/
 #SourceEngineBlock{
 /*	background-image: repeating-linear-gradient(315deg, #BF6000 5px, #BF6000 20px, #ce6700 25px, #ce6700 35px);
@@ -225,11 +232,32 @@ GtkCheckButton{
 }
 
 
-
 #SourceEngineBlock:selected,
 #SourceEngineBlock:selected:focus {
 	box-shadow: 0px 0px 20px @primary_0;
-    color: @theme_selected_fg_color;
+    color: @mainTextColour;
+}
+
+
+/*BINARY BLOCK:*/
+#BinaryEngineBlock{
+/*	background-image: repeating-linear-gradient(315deg, #BF6000 5px, #BF6000 20px, #ce6700 25px, #ce6700 35px);
+*/
+	background-color: @shade0;
+	box-shadow: 1px 1px 5px alpha(@altprimary_0, 0.8);
+}
+
+#BinaryEngineBlock > GtkLabel{
+	font-weight: bold;
+	font-size: 8pt;
+	text-shadow: 0 2px @shade2;
+}
+
+
+#BinaryEngineBlock:selected,
+#BinaryEngineBlock:selected:focus {
+	box-shadow: 0px 0px 20px @primary_0;
+    color: @mainTextColour;
 }
 
 
@@ -272,6 +300,17 @@ GtkCheckButton{
 }
 
 
+@keyframes levelBarPulse{
+	0%		{background-color: alpha(@altprimary_0, 0.3);}
+	50%		{background-color: alpha(@altprimary_4, 0.3);}
+	100%	{background-color: alpha(@altprimary_0, 0.3);}
+}
+
+@keyframes ProgressBarPulse{
+	0%		{background-color: @altprimary_0;}
+	50%		{background-color: @altprimary_4;}
+	100%	{background-color: @altprimary_0;}
+}
 
 /* PROGRESS BAR */
 
@@ -283,6 +322,17 @@ GtkProgressBar{
 .progressbar{
 	border-radius: 0;
 	background-color: @altprimary_0;
+	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+.progressbar.vertical{
+	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
 }
 
 .progressbar.left,
@@ -290,9 +340,24 @@ GtkProgressBar{
 	background-color: @altprimary_1;
 }
 
+.progressbar.pulse{
+	background-color: @secondary_0;
+}
+
+#PROGRESSBAR_SPECIAL.trough{
+	border: none;
+	background-color: @shade2;
+	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
 #LAUNCHERUTILITYBAR > GtkProgressBar{
 
 }
+
+
 
 .trough{
 	color: @mainTextColour;
@@ -305,24 +370,23 @@ GtkLevelBar{
 	border-radius: 0;
 }
 
-.level-bar.fill-block{
-	background-color: @altprimary_0;
-	border: 2px solid @altprimary_3;
+.level-bar.trough {
+	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+    padding: 2px;
 }
 
-.level-bar.indicator-discrete.fill-block{
+.level-bar.indicator-discrete.fill-block {	
 	background-color: @altprimary_0;
-	border: 2px solid @altprimary_3;
-	
+	border: 1px solid @altprimary_3;	    
 }
 
-.level-bar.fill-block.empty-fill-block{
+.level-bar.fill-block.empty-fill-block {
 	background-color: @shade0;
 	border: none;
 }
-
-
-
 
 
 /* SCROLLED WINDOW */
@@ -426,6 +490,7 @@ GtkFlowBox .grid-child:selected{
 	padding: 0px;
 	border-radius: 0;
 	border: 0;
+	color: @mainTextColour;
 }
 
 

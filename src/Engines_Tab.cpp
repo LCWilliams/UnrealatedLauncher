@@ -40,23 +40,26 @@ UnrealatedLauncher::Launcher_EngineTab::Launcher_EngineTab(){
 	Gtk::ScrolledWindow *v_sidePanelScrollWindow = Gtk::manage(new Gtk::ScrolledWindow);
 	Gtk::Frame *v_addNewFrame = Gtk::manage(new Gtk::Frame("Add Engine:"));
 	EngineAdd *v_AddEngine = Gtk::manage(new EngineAdd);
+	v_engineAddReference = v_AddEngine;
 	v_AddEngine->v_tabReference = this;
+	v_AddEngine->set_hexpand(false);
 	
 	v_sidePanelScrollWindow->add(*v_addNewFrame);
 	v_sidePanelScrollWindow->set_min_content_width(370);
-	v_sidePanelScrollWindow->set_min_content_height(500);
+	v_sidePanelScrollWindow->set_min_content_height(300);
 	v_sidePanelScrollWindow->set_hexpand(false);
-	v_sidePanelScrollWindow->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
 	v_sidePanelScrollWindow->set_vexpand(true);
 	
 	v_addNewFrame->add(*v_AddEngine);
 	v_addNewFrame->set_border_width(5);
+	v_addNewFrame->set_size_request(360, -1);
 	v_addNewFrame->set_vexpand(true);
+	v_addNewFrame->set_hexpand(false);
 
 //	v_sidepanelSubGrid_Add.attach(*v_addNewFrame, 0, 0, 1, 1);
 	v_sidepanelSubGrid_Add.attach(*v_sidePanelScrollWindow, 0, 0, 1, 1);
 	v_sidepanelSubGrid_Add.set_hexpand(false);
-	v_EngineTabSidePanel.show_all();
+//	v_EngineTabSidePanel.show_all();
 	
 
 
@@ -92,7 +95,6 @@ UnrealatedLauncher::Launcher_EngineTab::Launcher_EngineTab(){
 	// Hide:
 	v_sidepanelSubGrid_Add.hide();
 	v_sidepanelSubGrid_Details.hide();
-	
 } // END - EngineTab Constructor.
 
 UnrealatedLauncher::Launcher_EngineTab::~Launcher_EngineTab(){
@@ -100,11 +102,12 @@ UnrealatedLauncher::Launcher_EngineTab::~Launcher_EngineTab(){
 
 
 void UnrealatedLauncher::Launcher_EngineTab::btn_AddEngine_clicked(){
-	v_sidepanelSubGrid_Add.show_all();
+	v_sidepanelSubGrid_Add.show();
 	v_sidepanelSubGrid_Details.hide();
 	v_EngineTabSidePanel.set_reveal_child(true);
 	btn_AddEngine.set_sensitive(false);
 	v_EngineFlowBox.set_sensitive(false);
+	v_engineAddReference->EngineAdd_reset();
 }
 
 
@@ -175,4 +178,3 @@ void UnrealatedLauncher::Launcher_EngineTab::CloseAddWizard(){
 	v_EngineFlowBox.set_sensitive(true);
 	
 }
-

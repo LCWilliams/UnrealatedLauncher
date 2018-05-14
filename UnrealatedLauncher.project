@@ -20,9 +20,10 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="headers">
-    <VirtualDirectory Name="external">
-      <File Name="headers/external/git2.h"/>
-    </VirtualDirectory>
+    <File Name="headers/Launcher_Global.h"/>
+    <File Name="headers/Launcher_RepoManagerGit.h"/>
+    <File Name="headers/LauncherUtility.h"/>
+    <VirtualDirectory Name="external"/>
     <File Name="headers/Launcher_Marketplace.h"/>
     <File Name="headers/Launcher_Community.h"/>
     <File Name="headers/Launcher_Projects.h"/>
@@ -32,6 +33,13 @@
     <File Name="headers/AccountManager.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src">
+    <File Name="src/Launcher_Global.cpp"/>
+    <VirtualDirectory Name="Repo Manager">
+      <File Name="src/Launcher_Repomanager_Threads.cpp"/>
+      <File Name="src/Launcher_RepoManager_Buttons.cpp"/>
+      <File Name="src/Launcher_RepoManager_Git.cpp"/>
+      <File Name="src/UnrealatedLauncherRepoManager.cpp"/>
+    </VirtualDirectory>
     <File Name="src/UnrealatedLauncherSettings.cpp"/>
     <File Name="src/UnrealatedLauncher.cpp"/>
     <File Name="src/UnrealatedLauncherWindow.cpp"/>
@@ -54,11 +62,16 @@
         <IncludePath Value="."/>
         <IncludePath Value="headers/external"/>
       </Compiler>
-      <Linker Options="-pthread;-lstdc++;">
-        <LibraryPath Value="/libraries"/>
+      <Linker Options="-pthread;-lstdc++">
         <LibraryPath Value="/lib/x86_64-linux-gnu"/>
-        <Library Value="libgit2"/>
+        <LibraryPath Value="libraries"/>
+        <LibraryPath Value="/usr/local/libiconv/lib"/>
+        <Library Value="libiconv"/>
+        <Library Value="libsystemd"/>
+        <Library Value="libcrypto"/>
+        <Library Value="libz"/>
         <Library Value="libssl"/>
+        <Library Value="libgit2"/>
       </Linker>
       <ResourceCompiler Options=""/>
     </GlobalSettings>

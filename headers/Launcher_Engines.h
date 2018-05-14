@@ -1,3 +1,8 @@
+// COPYRIGHT © 2018
+// AUTHOR(S):	Lee Connor Williams
+// All Rights Reserved
+
+
 #ifndef LAUNCHERENGINES
 #define LAUNCHERENGINES
 
@@ -19,11 +24,13 @@
 #include <condition_variable>
 #include <limits.h>
 #include <stdlib.h>
+
+#include <headers/LauncherUtility.h>
+
 // External:
 #include <headers/external/simpleIni/SimpleIni.h>
-
 #include <headers/external/git2.h>
-//#include <headers/external/git2/sys/repository.h>
+
 
 //	typedef struct git_repository; // Not used...
 
@@ -32,7 +39,7 @@ namespace UnrealatedLauncher{
 	
 	class EngineBlock;
 	class Launcher_EngineTab;
-//	class UnrealatedLauncherWindow;
+	class EngineAdd;
 
 
 	class Launcher_EngineTab : public Gtk::Grid{
@@ -41,7 +48,8 @@ namespace UnrealatedLauncher{
 		virtual ~Launcher_EngineTab();
 		vector<EngineBlock*> v_EngineBlockArray;
 //		UnrealatedLauncher::UnrealatedLauncherWindow* v_windowRef; // Ref to parent window.
-	
+		EngineAdd* v_engineAddReference;
+		
 	// Public Functions:
 		void DeleteEngineBlock(EngineBlock* p_blockReference); // Removes an enigne block, and its files.
 		void CloseAddWizard();
@@ -62,7 +70,8 @@ namespace UnrealatedLauncher{
 		void SetPageTaskPercent(double p_progress){ v_taskProgress = p_progress; }; // Sets the task progress to the given value.
 		 int GetPageTasks(){return v_tasks;} // Gets the current number of tasks the page is performing.
 		double GetPageTaskProgress(){return v_taskProgress;} // Gets the current task progress.  Not used if more than one task is running.
-	
+
+
 //	void Update_updateLocalRepoBtn();
 		
 		unsigned int v_tasks = 0; // Number of tasks in progress; If higher than 1, pulse is used.
@@ -203,142 +212,73 @@ namespace UnrealatedLauncher{
 		virtual ~EngineAdd();
 		vector<EngineBlock*> v_engineBlockArray;
 		
-		Launcher_EngineTab* v_tabReference;
-		
-		// PUBLIC FUNCTIONS:
-		void updateLocalRepo_updateProgbar(Glib::ustring p_message, double p_progress){
-			if(v_statusProgBar.is_visible()){
-//				if(v_mutex_progress.try_lock()){
-				v_statusProgBar_text = p_message;
-				v_statusProgBar_progress = p_progress;
-//				v_mutex_progress.unlock();
-//				} // END - Mutex try lock
-			} // END - Progressbar visible
-		} // End - Update progbar data.
-		void updateLocalRepo_updatePageBar(double p_progress){ 
-			v_tabReference->SetPageTaskPercent(p_progress);
-		}
-		char updateLocalRepo_getLoginUsername(){return *login_username.c_str();}
-		char updateLocalRepo_getLoginUserpass(){return *login_password.c_str();}
-		
-		condition_variable v_waitingOnLogin_conditionVar; 
-		bool v_waitingOnLogin; // Set by Credential callback, reveals the login entries by Monitor Function.
-		mutex v_mutex_waitingOnLogin;
+		Launcher_EngineTab* v_tabReference; // Set by parent.
+
+		void EngineAdd_reset();
 	private:
-	// Protected by MUTEX:
-		vector<string> vec_commitComment; // Stores the commit comments
-		vector<string> vec_commitIDs; // Stores the commit IDs.
-		mutex v_mutex_commits;
-		
-		double v_statusProgBar_progress = 0; // Stores the percentage; set by "updateProgbar", grabbed by monitor function
-		string v_statusProgBar_text = ""; // Stores the text to display; set by "updateProgbar", grabbed by monitor function
-		Gtk::ComboBoxText v_commitSelector;
-		mutex v_mutex_progress;
-		
-		
+	
+	Gtk::Revealer v_revealer_online; // Revealer for online (commits, manage repo).
+	
+	Gtk::Frame	section_initial_frame,		// Frame for initial section.
+				section_commits_frame,		// Frame for commit options.
+				section_directories_frame,	// Frame for directory options.
+				section_labelAndImage_frame,// Frame for engine label & custom image.
+				section_confirm_frame;		// Frame that houses a preview of the output.
+	
+	Gtk::Grid 	section_initial,		// Grid for initial objects.
+				section_commits, 		// Grid for commit objects.
+				section_directories,	// Grid for directories.
+				section_labelAndImage,	// Grid for engine label & custom image selector.
+				section_confirm;		// Grid for confirmation.
+	
+	Gtk::RadioButton	btn_toggle_showTags, 
+						btn_toggle_showCommits; // Toggle button pair
+
+	
+	Gtk::CheckButton btn_addExisting,				// Checkbox, status of is used to update v_revealer_online.
+					 btn_showCommitsAfterTaggedCommit,	// Checkbox, reveals branch selector and modifies shown commits.
+					 btn_appendLabelToInstallDir,	// Checkbox, determines whether label is appended to install directory.
+					 btn_appendLabelToSourceDir,	// Checkbox, determines whether label is appended to source directory.
+					 btn_makeCopyOfImage;			// Checkbox, determines whether to make a copy of the custom image.
+	
+	Gtk::FileChooserButton	btn_chooser_installFolder,	// Folder chooser for install directory.
+							btn_chooser_sourceFolder,	// Folder chooser for source directory.
+							btn_chooser_customImage;	// File chooser for custom image.
+	
+	Gtk::Button btn_cancel, btn_confirm,// Apply & Confirm buttons.
+				btn_manageLauncherRepo;	// Opens launcher repo management.
+	
+	Gtk::ComboBoxText btn_commitSelector, btn_taggedCommitSelector;
+	
+	Gtk::Entry btn_labelEntry; // Engine label entry.
+	
+	Gtk::Label	txt_chooser_taggedCommits,
+				txt_chooser_commits,
+				txt_chooser_installFolder,
+				txt_chooser_sourceFolder,
+				txt_chooser_customImage,
+				txt_confirm_commit, 		// The commit to be used.
+				txt_confirm_installFolder,	// The install folder.
+				txt_confirm_sourceFolder,	// The source folder.
+				txt_confirm_helper;			// Helper text, informs of issues.
 	
 	
-		// GTK Elements:
-		Gtk::Label txt_label_selectSource, txt_label_selectInstall, txt_label_sourceExample, txt_label_installExample,
-		txt_label_engineLabel, txt_label_engineLabelStatus, txt_label_imageLabel;
-		Gtk::Button btn_cancel, btn_confirm;
-		Gtk::ButtonBox v_confirmCancelButtonBox, v_commitTypeRadioButtonBox;
-		Gtk::Border v_border;
-		Gtk::FileChooserButton btn_sourceFolder, btn_installFolder, btn_customImageChooser;
-		Gtk::Entry v_engineLabel;
+	// FUNCTIONS:
+		void SetConfirmTextSettings(Gtk::Label* p_label);
 		
+		// Timeouts:
+		bool setupTimeout(); // Runs setup.
 		
-		// Online:
-		bool gitInitialised = false; // Used to check status of git.
-		unsigned int v_maxCommits = 1000; // Replaced with value from settings
-		unsigned int v_currentCommitIndex = 0; // Temp variable.
-		Gtk::ToggleButton btn_addExisting; // Doubles as bool; controls visibility of revealer.
-		Gtk::Revealer v_onlineRevealer; // Holds the Online Grid
-		Gtk::Grid v_onlineGrid; // Holds all the online related Widgets.
-		Gtk::Button btn_updateLocalRepo, btn_gitLogin;
-		Gtk::Label txt_label_version, txt_label_selectCommit;
-		Gtk::RadioButton btn_showCommits, btn_showBranches;
-		Gtk::ProgressBar v_statusProgBar;
-		// Inter-thread Communication:
-		bool v_OnlineThreadBusy = false; // Set at start and end of thread function; controls monitor function.
+		// Button Signals:
+		void btn_addExisting_changed();
+		void btn_showCommitsAfterBranch_changed();
+		void btn_manageLauncherRepo_clicked();
+		void btn_toggle_showCommitsFilter();
+		void btn_chooser_installFolder_changed();
+		void btn_chooser_sourceFolder_changed();
 		
-		const char *REPO_PATH = "git@github.com:EpicGames/UnrealEngine.git"; 
-		string v_launcherRepoPath;
-	
-		// Login:
-		Gtk::Revealer v_loginRevealer;
-		Gtk::Grid v_loginGrid;
-		Gtk::Entry btn_login_username, btn_login_password;
-		Gtk::Label txt_label_loginUsername, txt_label_loginPassword, txt_label_loginStatus;
-		string login_username;
-		string login_password;
-		
-		// Functions: Buttons & Signal Responders
-			// General:
-		void btn_Cancel_clicked();
-		void btn_Confirm_clicked();
-		void btn_installFolder_changed();
-		void btn_sourceFolder_changed();
-		void btn_customImageChooser_changed();
-		void v_engineSelector_changed();
-		void v_engineLabel_changed();
-
-			// Online
-		void btn_addExisting_clicked();
-		void btn_updateLocalRepo_clicked();
-		void threadFunction_updateLocalRepo(); // Main function
-
-		// Online: Subfunctions
-		void localRepo_cleanup(); // Performs cleanup.
-		bool localRepo_populateCommits(); // Populates the
-		
-			// Login:
-		void btn_gitLogin_clicked();
-
-		// Functions: Utility
-		void CheckCanConfirm(); // Checks all input is valid before allowing Confirm to be sensitive.
-		bool MonitorActivity(); // Idle function, monitors boolean and changes button state when finished.
-		 
-
-		// Idle Timeout:
-		bool updateLocalRepo_finalStep();
-
-		string utility_RemoveFileFromString(string p_stringToModify){ 
-			return p_stringToModify.erase(0, 7); 
-		} // END - Utility Remove File From String
-		
-		void updateLocalRepo_AddCommit(string p_commitID, string p_commitComment){ // Adds a commit to both vectors.
-			vec_commitIDs.push_back(p_commitID);
-			vec_commitComment.push_back(p_commitComment);
-//			v_commitSelector.append(p_commitComment);
-		} // END - Add commit
-		
-
-		int utility_checkDirectories(string p_directory){ /**
-		 * Returns 0 if directory is not used. 
-		 * 1 if it is used as an install dir.  
-		 * 2 if it is used as a source dir.
-		 **/
-		 int returnCode = 0;
-		 
-			for(int index = 0; index < static_cast<int>(v_tabReference->v_EngineBlockArray.size()); index++){
-				if(p_directory == v_tabReference->v_EngineBlockArray[index]->v_EngineInstallDir)returnCode = 1;
-				if(p_directory == v_tabReference->v_EngineBlockArray[index]->v_EngineSourceDir)returnCode = 2;
-			} // END - For Loop
-		return(returnCode);
-		} // END - Utility CheckDirs.
-		void status_onlineTaskFailed(string p_message, string p_consoleMessage){ // p_Message: brief message put into the progress bar.  Console Message: More thorough message printed to console.
-			v_OnlineThreadBusy = false;
-
-			v_statusProgBar.set_text(p_message);
-			cout << p_consoleMessage << endl; 
-			cerr << " [GIT ERROR: " << giterr_last()->message << "]" << endl << endl;
-			
-			git_libgit2_shutdown();
-		}  // END - Online task failed.
-	};
-
-
+		void btn_chooser_customImage_changed();
+	}; // END - EngineAdd namespace.
 } // END - Unrealated Launcher Namespace.
 
 #endif
