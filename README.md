@@ -49,10 +49,11 @@ This stage is almost completely automated.
 If you are stuck on the 2nd stage "Running Setup.sh, Check the terminal for sudo prompts", you're stuck on a sudo prompt for missing dependancies (the script is asking for software it needs to be installed).  Please close and re-launch the Launcher from a terminal:  you'll be able to enter your password and continue as normal.
 
 ### Notes:
-The installation stage is currently coded in a way that works in a rudamentary way: I'm working on improving this.
+The installation stage is currently coded in a way that works, but is very rudamentary: I'm working on improving this.
 
 # GENERAL NOTES:
 Please remember that this is **NOT FINISHED**, It's also the first time I have personally created software.
+As a repeat: this launcher is **unofficial**, it is made by me, not EpicGames.
 This project will have an associated Patreon and KoFi/BuyMeCoffee for monetary support; the more of which means the more time I can dedicate to improving the launcher; which is nessecary for...
 
 # PLANNED FEATURES:
