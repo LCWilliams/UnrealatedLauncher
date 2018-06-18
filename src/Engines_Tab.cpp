@@ -40,12 +40,12 @@ UnrealatedLauncher::Launcher_EngineTab::Launcher_EngineTab(){
 	Gtk::ScrolledWindow *v_sidePanelScrollWindow = Gtk::manage(new Gtk::ScrolledWindow);
 	Gtk::Frame *v_addNewFrame = Gtk::manage(new Gtk::Frame("Add Engine:"));
 	EngineAdd *v_AddEngine = Gtk::manage(new EngineAdd);
-	v_engineAddReference = v_AddEngine;
+	ref_EngineAdd = v_AddEngine;
 	v_AddEngine->v_tabReference = this;
 	v_AddEngine->set_hexpand(false);
 	
 	v_sidePanelScrollWindow->add(*v_addNewFrame);
-	v_sidePanelScrollWindow->set_min_content_width(370);
+	v_sidePanelScrollWindow->set_min_content_width(380);
 	v_sidePanelScrollWindow->set_min_content_height(300);
 	v_sidePanelScrollWindow->set_hexpand(false);
 	v_sidePanelScrollWindow->set_vexpand(true);
@@ -72,9 +72,8 @@ UnrealatedLauncher::Launcher_EngineTab::Launcher_EngineTab(){
 	v_EngineFlowBox.set_valign(Gtk::ALIGN_START);
 	v_EngineFlowBox.set_halign(Gtk::ALIGN_START);
 	v_EngineFlowBox.set_min_children_per_line(3);
+
 		// DEBUG:
-		
-	
 	v_FlowboxScrolledWindowWrapper.set_min_content_height(400);
 	v_FlowboxScrolledWindowWrapper.set_min_content_width(1000);
 //	v_FlowboxScrolledWindowWrapper.set_margin_end(10);
@@ -107,7 +106,7 @@ void UnrealatedLauncher::Launcher_EngineTab::btn_AddEngine_clicked(){
 	v_EngineTabSidePanel.set_reveal_child(true);
 	btn_AddEngine.set_sensitive(false);
 	v_EngineFlowBox.set_sensitive(false);
-	v_engineAddReference->EngineAdd_reset();
+	ref_EngineAdd->EngineAdd_reset();
 }
 
 
@@ -115,16 +114,34 @@ void UnrealatedLauncher::Launcher_EngineTab::btn_AddEngine_clicked(){
 void UnrealatedLauncher::Launcher_EngineTab::AddNewEngine(){
 	
 	// Create new engine block.
-	EngineBlock *newBlock = Gtk::manage(new EngineBlock("/mnt/640GB/1TB_Contents/TempTesting/InstallDir", "/mnt/640GB/1TB_Contents/TempTesting/SourceDir", "", "Nope", "COMMITSTRING"));
-	
-	// Add to Flowbox.
-	v_EngineFlowBox.add(*newBlock);
+	EngineBlock *newBlock = Gtk::manage(new EngineBlock(
+												ref_EngineAdd->installData.installDir,
+												ref_EngineAdd->installData.customImage, 
+												ref_EngineAdd->installData.engineLabel,
+												ref_EngineAdd->installData.commitID, 
+												ref_EngineAdd->installData.codeEditor ));
 
+	// SET ENGINE TAB REFERENCE [Important!]
+	newBlock->v_TabReference = (Launcher_EngineTab*)this;
+	
 	// Add to array.
 	v_EngineBlockArray.push_back(newBlock);
 
+	// Add to Flowbox.
+	v_EngineFlowBox.add(*newBlock);
+
 	// Run show all.
 	v_EngineFlowBox.show_all();
+	
+	// Reset Add Panel.
+	ref_EngineAdd->EngineAdd_reset();
+	
+	// Run Installation:
+	if(ref_EngineAdd->EngineAdd_startInstallAfterFinished){
+//		newBlock->EngineBlock_install();	// Run install.
+		newBlock->InfoBarResponse(1); 		// Hide the info bar; and "continues" install.
+	}
+
 } // END - Add New Engine.
 
 
@@ -143,8 +160,15 @@ void UnrealatedLauncher::Launcher_EngineTab::AddExistingEngines(){
 			char resolvedPath[PATH_MAX];
 			string temp_AbsolutePath = realpath(v_filePath, resolvedPath);
 			
-			EngineBlock *currentBlock = Gtk::manage(new EngineBlock(resolvedPath));
-			v_EngineBlockArray.push_back(currentBlock);
+			std::string::size_type temp_stringType;
+			temp_stringType = temp_AbsolutePath.rfind(".ini");
+			
+			if( temp_stringType != string::npos){
+				EngineBlock *currentBlock = Gtk::manage(new EngineBlock(resolvedPath));
+				v_EngineBlockArray.push_back(currentBlock);
+			} else{
+				cerr << "WARN:	Non .ini file found in engine folder: " << resolvedPath << endl;
+			}
 		} // END - If Filename
 		// Set next file:
 		sprintf(v_filePath, "%s/%s", configFolderString.c_str(), next_file->d_name);
@@ -168,7 +192,9 @@ void UnrealatedLauncher::Launcher_EngineTab::DeleteEngineBlock(EngineBlock* p_bl
 	std::remove(v_engineIniFile.c_str());
 		
 	// Hide the block
-	p_blockReference->hide();
+	delete p_blockReference;
+//	remove(p_blockReference);
+//	p_blockReference->hide();
 } // END - Delete Engine Block
 
 
@@ -176,5 +202,8 @@ void UnrealatedLauncher::Launcher_EngineTab::CloseAddWizard(){
 	btn_AddEngine.set_sensitive(true);
 	v_EngineTabSidePanel.set_reveal_child(false);
 	v_EngineFlowBox.set_sensitive(true);
-	
 }
+
+//void UnrealatedLauncher::Launcher_EngineTab::middleMan_openRepoManager(){
+//	ref_mainWindow->repoManager_open();
+//}

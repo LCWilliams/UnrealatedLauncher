@@ -35,7 +35,6 @@ UnrealatedSettings::UnrealatedSettings():
 	txt_launcherRepoUpdateInterval("Background Sync Interval:"),
 	txt_RepoDirLabel("Launcher repository directory:"),
 	txt_defaultInstallDirLabel("Default install directory:"),
-	txt_defaultSourceDirLabel("Default source directory:"),
 	txt_maxTaggedCommits("Max tagged commits:"),
 	txt_maxCommits("Max Commits:"),
 	txt_commitWrap("Commit Wrap:")
@@ -152,13 +151,7 @@ UnrealatedSettings::UnrealatedSettings():
 	page_engines_directories.attach(btn_defaultInstallDir, 1, 2, 1, 1);
 		btn_defaultInstallDir.set_action(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
 		btn_defaultInstallDir.set_tooltip_text("The default parent folder the engine is installed into.");
-	
-	page_engines_directories.attach(txt_defaultSourceDirLabel, 0, 3, 1, 1);
-		txt_defaultSourceDirLabel.set_halign(Gtk::ALIGN_END);
-	page_engines_directories.attach(btn_defaultSourceDir, 1, 3, 1, 1);
-		btn_defaultSourceDir.set_action(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
-		btn_defaultSourceDir.set_tooltip_text("The default parent folder for the engine source files.");
-	
+		
 	
 		// Engine Add Options:
 	page_engines_addOptions_frame.add(page_engines_addOptions);
@@ -168,8 +161,8 @@ UnrealatedSettings::UnrealatedSettings():
 	page_engines_addOptions.attach(txt_maxTaggedCommits, 0, 0, 1, 1);
 	page_engines_addOptions.attach(btn_maxTaggedCommits, 1, 0, 1, 1);
 		txt_maxTaggedCommits.set_halign(Gtk::ALIGN_END);
-		btn_maxTaggedCommits.set_range(5, 30);
-		btn_maxTaggedCommits.set_increments(1, 5);
+		btn_maxTaggedCommits.set_range(5, 500);
+		btn_maxTaggedCommits.set_increments(5, 10);
 		btn_maxTaggedCommits.set_tooltip_text("Maximum number of tagged commits that will be shown in the selector.");
 	
 	page_engines_addOptions.attach(txt_maxCommits, 0, 1, 1, 1);
@@ -185,7 +178,7 @@ UnrealatedSettings::UnrealatedSettings():
 	page_engines_addOptions.attach(txt_commitWrap, 0, 3, 1, 1);
 		txt_commitWrap.set_halign(Gtk::ALIGN_END);
 	page_engines_addOptions.attach(btn_commitWrap, 1, 3, 1, 1);
-		btn_commitWrap.set_tooltip_text("How many columns the commit selector will span. \nIncrease to show more results on the screen at once.");
+		btn_commitWrap.set_tooltip_text("How many columns the commit selector will span. \nHigher numbers will show more commits at once, but limit readability of longer commits.");
 		btn_commitWrap.set_wrap(true);
 		btn_commitWrap.set_range(1, 10);
 		btn_commitWrap.set_increments(1, 3);
@@ -206,7 +199,7 @@ UnrealatedSettings::UnrealatedSettings():
 	
 	page_engines_manageLauncherRepo.attach(btn_launcherRepoUpdateInterval, 1, 2, 1, 1);
 		btn_launcherRepoUpdateInterval.set_tooltip_text("Interval, in minutes, in which the repository is synced.");
-		btn_launcherRepoUpdateInterval.set_range(1, 30);
+		btn_launcherRepoUpdateInterval.set_range(1, 120);
 		btn_launcherRepoUpdateInterval.set_increments(1, 5);
 
 
@@ -220,7 +213,7 @@ UnrealatedSettings::~UnrealatedSettings(){
 
 															// BUTTON FUNCTIONS:
 void UnrealatedSettings::btn_cancelSettings_clicked(){
-	v_windowRef->settings_closed();
+	ref_window->settings_closed();
 	readPreferences();
 } // END - Cancel.
 
@@ -256,8 +249,6 @@ void UnrealatedSettings::btn_confirmSettings_clicked(){
 		temp_Conversion = btn_defaultInstallDir.get_uri().erase(0, 7); 
 		ini.SetValue("Engines", "defaultInstallDir", temp_Conversion.c_str());
 
-		temp_Conversion = btn_defaultSourceDir.get_uri().erase(0, 7); 
-		ini.SetValue("Engines", "defaultSourceDir", temp_Conversion.c_str());
 		
 		ini.SetDoubleValue("Engines", "maxTaggedCommits", btn_maxTaggedCommits.get_value());
 		ini.SetDoubleValue("Engines", "maxCommits", btn_maxCommits.get_value());
@@ -274,7 +265,7 @@ void UnrealatedSettings::btn_confirmSettings_clicked(){
 	temp_errorCheck = ini.SaveFile(UnrealatedLauncherGlobal::launcherConfig.c_str());
 	if(temp_errorCheck < 0) return;
 	
-	v_windowRef->settings_closed();
+	ref_window->settings_closed();
 	
 	settings_writeSettingsVariables();
 	
@@ -282,7 +273,7 @@ void UnrealatedSettings::btn_confirmSettings_clicked(){
 
 void UnrealatedSettings::btn_resetAll_clicked(){	
 	// GENERAL:
-	btn_useSystemTheme.set_active(true);
+	btn_useSystemTheme.set_active(false);
 	btn_utilityOpenOnDefault.set_active(true);
 	btn_showLauncherRepoStatus.set_active(true);
 	btn_showLatestCommit.set_active(true);
@@ -293,10 +284,9 @@ void UnrealatedSettings::btn_resetAll_clicked(){
 	btn_backgroundSync_regenLists.set_active(true);
 	btn_launcherRepoUpdateInterval.set_value(10);
 	btn_launcherRepoDir.set_filename("./launcherRepo");
-	btn_defaultInstallDir.set_filename("./engines/install");
-	btn_defaultSourceDir.set_filename("./engines/source");
-	btn_maxTaggedCommits.set_value(30);
-	btn_maxCommits.set_value(150);
+	btn_defaultInstallDir.set_filename("./engines");
+	btn_maxTaggedCommits.set_value(200);
+	btn_maxCommits.set_value(300);
 	btn_defaultShowTaggedCommits.set_active(true);
 	btn_commitWrap.set_value(1);
 		// Write Market:
@@ -348,7 +338,6 @@ void UnrealatedSettings::readPreferences(){
 	btn_launcherRepoUpdateInterval.set_value(ini.GetDoubleValue("Engines", "BackgroundRepoSyncInterval"));
 	btn_launcherRepoDir.set_filename(ini.GetValue("Engines", "launcherRepo"));
 	btn_defaultInstallDir.set_filename(ini.GetValue("Engines", "defaultInstallDir"));
-	btn_defaultSourceDir.set_filename(ini.GetValue("Engines", "defaultSourceDir"));
 	btn_maxTaggedCommits.set_value(ini.GetDoubleValue("Engines", "maxTaggedCommits"));
 	btn_maxCommits.set_value(ini.GetDoubleValue("Engines", "maxCommits"));
 	btn_defaultShowTaggedCommits.set_active(ini.GetBoolValue("Engines", "defaultShowTaggedCommits"));
@@ -356,3 +345,12 @@ void UnrealatedSettings::readPreferences(){
 	
 	settings_writeSettingsVariables();
 } // END - read preferences.
+
+bool UnrealatedSettings::LauncherSettings_Get_BackgroundSync(){	return btn_backgroundSync.get_active(); }
+bool UnrealatedSettings::launcherSettings_Get_RegenLists(){	
+	cout << "Debug return true" << endl;
+//	cout << "DEBUG:	Regen List:" << btn_backgroundSync_regenLists.get_active() << endl;
+//	return btn_backgroundSync_regenLists.get_active(); }
+	return true;
+}
+int	 UnrealatedSettings::launcherSettings_get_syncInterval(){	return btn_launcherRepoUpdateInterval.get_value_as_int(); }

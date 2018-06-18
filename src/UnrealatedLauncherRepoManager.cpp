@@ -10,7 +10,7 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 	repoManager_options_frame("Options"),
 	btn_closeWindow("Hide Manger"),
 	
-	// Login:
+// Login:
 	txt_login_username("Username:"),
 	txt_login_password("Password:"),
 	txt_login_status_label("Status:"),
@@ -19,7 +19,7 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 	btn_login_logout("Logout"),
 	btn_login_rememberDetails("Remember Login Details"),
 	
-	// Manage:
+// Manage:
 	btn_manage_getNew("Get New Repository"),
 	btn_manage_update("Update Launcher Repository"),
 	btn_manage_generateLists("(Re)Generate Lists"),
@@ -28,13 +28,17 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 	btn_manage_clearRepoConfirm("Confirm Clear"),
 	btn_manage_clearRepoCancel("Cancel"),
 	btn_manage_clearRepo_box(Gtk::ORIENTATION_HORIZONTAL),
-	// Status:
+
+// Status:
 	txt_status_currentTask_label("Current Task:"),
 	txt_status_currentTask("..."),
 	txt_status_repoStatus_label("Repo Status:"),
 	txt_status_repoStatus("..."),
-	btn_status_cancel("Cancel")
+	btn_status_cancel("Cancel"),
 	
+// OPTIONS:
+	btn_options_lists_replace("Replace/Overwrite existing")
+
 { // LAUNCHER REPO MANAGER CONSTRUCTOR:
 	// Grid settings:
 	set_hexpand(true);
@@ -93,13 +97,14 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 		repoManager_login.set_valign(Gtk::ALIGN_CENTER);
 	repoManager_login.attach(btn_login_logout, 0, 3, 2, 1);
 		btn_login_logout.set_tooltip_text("Clears your login information, and deletes the file from disk\nif 'remember login' is checked.");
-	
+
+
 	// Signal Handlers:
 	btn_login_login.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::btn_login_login_clicked));
 	btn_login_logout.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::btn_login_logOut_clicked));
-	
-	
-	
+
+
+
 	// Buttons (manage):
 	repoManager_manageButtons_frame.add(repoManager_manageButtons);
 	v_repoManager_flowBox.add(repoManager_manageButtons_frame);
@@ -113,7 +118,7 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 		btn_manage_update.set_tooltip_text("Updates the launcher repository.");
 		btn_manage_update.set_hexpand();
 	repoManager_manageButtons.attach(btn_manage_generateLists, 0, 2, 1, 1);
-		btn_manage_generateLists.set_tooltip_text("Generates the lists used by the launcher for showing the commits. \nBehaviour is specified in OPTIONS in the event of regenerating.");
+		btn_manage_generateLists.set_tooltip_text("Generates the lists used by the launcher for showing the commits.");
 		btn_manage_generateLists.set_hexpand();
 		
 	repoManager_manageButtons.attach(btn_manage_updateAll, 1, 0, 1, 3);
@@ -126,6 +131,7 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 	repoManager_manageButtons.attach(btn_manage_clearRepo_box, 0, 4, 2, 1);
 		btn_manage_clearRepo_box.set_layout(Gtk::BUTTONBOX_EXPAND);
 		btn_manage_clearRepo_box.add(btn_manage_clearRepoConfirm);
+			btn_manage_clearRepoConfirm.set_name("btn_Red");
 		btn_manage_clearRepo_box.add(btn_manage_clearRepoCancel);
 	
 	
@@ -158,13 +164,16 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 	
 	repoManager_status.attach(v_status_progressBar, 0, 2, 2, 1);
 		v_status_progressBar.set_hexpand(true);
+//		v_status_progressBar.set_size_request(320, -1);
 		v_status_progressBar.set_pulse_step(0.05);
 		v_status_progressBar.set_show_text(true);
-		v_status_progressBar.set_halign(Gtk::ALIGN_CENTER);
+		v_status_progressBar.set_ellipsize(Pango::ELLIPSIZE_START);
+//		v_status_progressBar.set_halign(Gtk::ALIGN_CENTER);
 		
 		
 	repoManager_status.attach(v_status_levelBar, 0, 3, 3, 1);
-		v_status_levelBar.set_hexpand();
+		v_status_levelBar.set_hexpand(false);
+//		v_status_levelBar.set_size_request(300, -1);
 		v_status_levelBar.set_mode(Gtk::LEVEL_BAR_MODE_DISCRETE);
 
 //	repoManager_status.attach(btn_status_cancel, 0, 4, 2, 1);
@@ -181,6 +190,9 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 	v_repoManager_flowBox.add(repoManager_options_frame);
 	LauncherUtility_setGridSettings(&repoManager_options);
 	
+	Gtk::Label *txt_listOptions_label = Gtk::manage(new Gtk::Label("List Options:"));
+	repoManager_options.attach(*txt_listOptions_label, 0, 0, 2, 1);
+	repoManager_options.attach(btn_options_lists_replace, 0, 1, 2, 1);
 	
 //	LauncherUtility_setGridSettings(this);
 
@@ -188,6 +200,14 @@ UnrealatedLauncherRepoManager::UnrealatedLauncherRepoManager():
 	btn_closeWindow.set_border_width(10);
 
 	show_all();
+
+	CSimpleIniCaseA temp_ini;
+	SI_Error temp_iniError = temp_ini.LoadFile(UnrealatedLauncherGlobal::launcherConfig.c_str());
+	if(temp_iniError == 0){
+		int temp_interval =  temp_ini.GetDoubleValue("Engines", "BackgroundRepoSyncInterval") * 60000;
+		Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::idle_backgroundSync), temp_interval );
+	}
+
 } // END - Launcher Repo Manager.
 
 UnrealatedLauncherRepoManager::~UnrealatedLauncherRepoManager(){
@@ -196,16 +216,15 @@ UnrealatedLauncherRepoManager::~UnrealatedLauncherRepoManager(){
 // BUTTON FUNCTIONS:
 void UnrealatedLauncherRepoManager::btn_closeWindow_clicked(){
 	ref_window->repoManager_closed();
+	
+	// MIDDLEMEN:
+	ref_window->ref_engineTab->middleMan_openRepoManager_bool = false;
+	
 } // Btn Close Window Clicked.
 
 
 void UnrealatedLauncherRepoManager::launcherRepoManager_setup(){
-	CSimpleIniCaseA temp_ini;
-	SI_Error temp_iniError = temp_ini.LoadFile("./config/UnrealatedLauncher.ini");
-	
-	if(temp_iniError != 0){
-		
-	}
+
 	
 	// Check 
 	if(LauncherUtility_checkFileExists(UnrealatedLauncherGlobal::repoManagerLoginFile)){
@@ -270,5 +289,23 @@ void UnrealatedLauncherRepoManager::RepoManager_setOnlineRelated(bool p_state){	
 		btn_manage_update.set_sensitive(p_state);
 		btn_manage_updateAll.set_sensitive(p_state);
 	}	// END - else.
-
 } // END - SetOnline Related
+
+
+bool UnrealatedLauncherRepoManager::idle_backgroundSync(){
+
+	CSimpleIniCaseA temp_ini;
+	SI_Error temp_iniError = temp_ini.LoadFile(UnrealatedLauncherGlobal::launcherConfig.c_str());
+	
+	if(temp_iniError == 0) {
+		if( !threadComm_onlineTaskBusy ) {
+			if( temp_ini.GetBoolValue("Engines", "BackgroundRepoSync_RegenList") ){	// Regen Lists on Sync:
+					btn_manage_updateAll_clicked();
+				} else{													// Update only.
+					btn_manage_update_clicked();
+				}
+		}// END - Ini load.
+	}
+
+	return temp_ini.GetBoolValue("Engines", "BackgroundRepoSync");
+}

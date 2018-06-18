@@ -77,7 +77,9 @@ void UnrealatedLauncherRepoManager::btn_manage_clearRepoConfirm_clicked(){
 	btn_manage_clearRepo_box.hide();
 	btn_manage_clearRepo.set_sensitive(true);
 	
-	v_status_levelBar.set_max_value(1);
+	v_status_levelBar.set_max_value(2);
+	// Find
+	// Remove.
 	
 	thread  thread_clearRepo(&UnrealatedLauncherRepoManager::RepoManager_thread_clearRepo, this);
 	thread_clearRepo.detach();
@@ -85,6 +87,9 @@ void UnrealatedLauncherRepoManager::btn_manage_clearRepoConfirm_clicked(){
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::RepoManager_timeout), 50);
 	
 }
+
+
+
 void UnrealatedLauncherRepoManager::btn_manage_getNew_clicked(){
 	RepoManager_updateRepoDir();
 	
@@ -92,6 +97,7 @@ void UnrealatedLauncherRepoManager::btn_manage_getNew_clicked(){
 	
 	repoManager_manageButtons_frame.set_sensitive(false);
 
+	threadComm_currentStage = 0;
 	v_status_levelBar.set_max_value(3);
 	// Connect
 	// Download
@@ -111,14 +117,55 @@ void UnrealatedLauncherRepoManager::btn_manage_getNew_clicked(){
 
 void UnrealatedLauncherRepoManager::btn_manage_generateLists_clicked(){
 	repoManager_manageButtons_frame.set_sensitive(false);
+	
+	RepoManager_updateRepoDir();
+	
+	btn_status_cancel.show();	// Show the cancel button.
+	
+	repoManager_manageButtons_frame.set_sensitive(false);
+
+	threadComm_currentStage = 0;
+	v_status_levelBar.set_max_value(1);
+	// Update Lists.
+	threadComm_onlineTaskBusy = true;
+
+	thread  thread_Getnew(&UnrealatedLauncherRepoManager::RepoManager_thread_GenerateLists, this);
+	thread_Getnew.detach();
+	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::RepoManager_timeout), 50);
+	
 }
 
 void UnrealatedLauncherRepoManager::btn_manage_update_clicked(){
 	repoManager_manageButtons_frame.set_sensitive(false);
+	
+	threadComm_currentStage = 0;
+	v_status_levelBar.set_max_value(3);
+	
+	thread  thread_update(&UnrealatedLauncherRepoManager::RepoManager_thread_update, this);
+	thread_update.detach();
+	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::RepoManager_timeout), 50);
+	
+	threadComm_onlineTaskBusy = true;
+	
 }
 
 void UnrealatedLauncherRepoManager::btn_manage_updateAll_clicked(){
 	repoManager_manageButtons_frame.set_sensitive(false);
+	
+	threadComm_currentStage = 0;
+	v_status_levelBar.set_max_value(5);
+	/* STEPS:
+	 * [1] Check,
+	 * [3] Get New / Update
+	 * [1] Generate Lists
+	 */
+	
+	thread  thread_updateAll(&UnrealatedLauncherRepoManager::RepoManager_thread_updateAll, this);
+	thread_updateAll.detach();
+	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::RepoManager_timeout), 50);
+	
+	threadComm_onlineTaskBusy = true;
+	threadComm_multiStageTask = true;
 }
 
 void UnrealatedLauncherRepoManager::btn_status_cancel_clicked(){

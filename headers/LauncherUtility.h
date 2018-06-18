@@ -26,7 +26,12 @@ namespace LauncherUtility{
 	static string LauncherUtility_realPath(string p_path);
 	static bool LauncherUtility_checkFileExists(const string p_path);
 	static void LauncherUtility_debug(string p_debugMessage);
-
+	static string LauncherUtility_removePercent20(string p_path);	// Removes %20 from a path string.
+	static string LauncherUtility_removeElementFromString(string p_stringToModify, string p_charactersToRemove, unsigned int p_length);	/*
+	 * @p_stringToModify The string which is being modified.
+	 * @p_charactersToRemove What characters to search for and remove.
+	 * @p_length The size of the characters in which to remove.
+	 */
 
 // VOID/NON RETURN UTILITIES:
 
@@ -99,6 +104,26 @@ namespace LauncherUtility{
 	static void LauncherUtility_debug(string p_debugMessage){
 		cout << "DEBUG:	" << p_debugMessage << endl;
 	} // END- Debug.
+
+	static string LauncherUtility_removePercent20(string p_path){	// Removes %20 from a path string.
+		string stringToChange = p_path;
+		for (size_t position = stringToChange.find("%20"); 
+			position != string::npos; 
+			position = stringToChange.find("%20", position) ){
+			stringToChange.replace(position, 3, " ");
+		}
+		return stringToChange;
+	}
+	
+	static string LauncherUtility_removeElementFromString(string p_stringToModify, string p_charactersToRemove, unsigned int p_length){
+		string stringToChange = p_stringToModify;
+		for (size_t position = stringToChange.find(p_charactersToRemove); 
+			position != string::npos; 
+			position = stringToChange.find(p_charactersToRemove, position) ){
+			stringToChange.replace(position, p_length, "");
+		}
+		return stringToChange;
+	} // END - Remove element from string.
 	
 } // END - Namespace.
 

@@ -1,0 +1,23 @@
+/* FILE THAT CONTAINS ALL THE KEYFRAMES (animations). */
+
+
+@keyframes Keyframes_EngineLaunchButton_running{
+	0%		{ background-image: repeating-linear-gradient(315deg, @tertiary_3 0%, @tertiary_4 50%, @tertiary_4 55%);}
+	25%		{ background-image: repeating-linear-gradient(315deg, @primary_3 0%, @primary_4 90%, @primary_3 100%);}
+	75%		{ background-image: repeating-linear-gradient(315deg, @primary_3 0%, @primary_4 10%, @primary_3 100%);}
+	100%	{ background-image: repeating-linear-gradient(315deg, @tertiary_3 0%, @tertiary_4 50%, @tertiary_4 55%);}
+}
+
+
+@keyframes levelBarPulse{
+	0%		{background-color: alpha(@altprimary_0, 0.3);}
+	50%		{background-color: alpha(@altprimary_4, 0.3);}
+	100%	{background-color: alpha(@altprimary_0, 0.3);}
+}
+
+
+@keyframes ProgressBarPulse{
+	0%		{background-color: @altprimary_0;}
+	50%		{background-color: @altprimary_4;}
+	100%	{background-color: @altprimary_0;}
+}

@@ -1,0 +1,595 @@
+/*  */
+
+@import url("constants.css");
+@import url("keyframes.css");
+@import url("assets.css");
+
+/*DEFAULTS:*/
+*{
+	padding: 0;
+	border: none;
+	-GtkButton-child-displacement-x: 0;
+    -GtkButton-child-displacement-y: 0;
+    -GtkButton-image-spacing: 10;
+
+    -GtkCheckButton-indicator-size: 15;
+    -GtkCheckMenuItem-indicator-size: 15;
+
+    -GtkDialog-button-spacing: 4;
+    -GtkDialog-content-area-border: 6;
+    -GtkDialog-action-area-border: 6;
+    
+    -GtkExpander-expander-size: 14;
+
+    -GtkHTML-link-color: @mainTextColour;
+    -GtkIMHtml-hyperlink-color: @mainTextColour;
+    
+    -GtkMenu-horizontal-padding: 0;
+    -GtkMenu-vertical-padding: 0;
+    
+    -GtkPaned-handle-size: 5;
+    
+    -GtkScrolledWindow-scrollbar-spacing: 0;
+    -GtkScrolledWindow-scrollbars-within-bevel: 1;
+    
+    -GtkTextView-error-underline-color: @altprimary_4;
+    
+    -GtkToolButton-icon-spacing: 6;
+    -GtkToolItemGroup-expander-size: 11;
+    
+    -GtkTreeView-expander-size: 11;
+    -GtkTreeView-horizontal-separator: 2;
+    -GtkTreeView-vertical-separator: 0;
+
+    -GtkWidget-focus-line-width: 0;
+    -GtkWidget-separator-height: 1;
+    -GtkWidget-separator-width: 1;
+    -GtkWindow-resize-grip-width: 0;
+    -GtkWindow-resize-grip-height: 0
+
+    -WnckTasklist-fade-overlay-rect: 0;
+}
+
+
+.background{
+	background-color: @shade0;
+	color: @mainTextColour;
+}
+
+#DULLEDTEXT{
+	color: alpha(@mainTextColour, 0.5);
+}
+
+#UNREALATEDLAUNCHERSETTINGS{
+	border-bottom: solid 2.5px @primary_4;
+}
+
+
+
+*:selected,
+*:selected:focus {
+	background-color: @alt_primary0;
+	border: none;
+}
+
+.frame{
+	border: solid 1.5px @shade0;
+	padding: 0;
+	border-radius: 0;
+}
+
+.frame.flat{
+	border: none;
+}
+
+
+
+#EngineTabSidePanel > GtkGrid{
+	margin: 5px;
+	border-left: 2.5px solid @primary_4;
+	background-color: @shade1;
+}
+
+
+#EngineTabSidePanel > GtkGrid .button:checked{
+	background-color: @primary_0;
+}
+
+
+
+
+
+/* BUTTONS (sweeping):*/
+
+GtkButton{
+	padding: 3px 7px 3px;
+}
+
+.button{
+	border: none;
+	border-radius: 0;
+	background-color: @shade2;
+	color: rgb(175, 175, 175);
+}
+
+.button:insensitive{
+	background-color: @shade0;
+	color: rgb(150, 150, 150);
+}
+
+.button:hover {
+	background-color: @shade3;
+}
+
+.button:active{
+	background-color: @primary_4;
+}
+
+.button:checked{
+    background-color: @primary_3;
+    color: white;
+}
+
+
+
+.stack-switcher .button{
+    background-color: @shade1;
+	font-size: 12pt;
+	font-weight: bold;
+	text-shadow: 0 2px @shade2;
+
+	border-bottom: 3.5px solid @primary_4;
+	
+}
+
+.stack-switcher .button:hover{
+    background-color: alpha(@shade3, 0.6);
+}
+
+.stack-switcher .button:checked,
+.stack-switcher .button:active{
+	background-color: @shade2;
+	border-bottom: 7.5px solid @primary_0;
+}
+
+.stack-switcher .requires-attention{
+	border-bottom: 7.5px solid @altprimary_0;
+}
+
+.action-bar{
+	padding: 5px;
+	background-color: @shade1;
+}
+
+
+#btn_Red{
+	padding: 0;
+	color: white;
+	background-color: rgba(100, 0, 0, 0.75);
+
+}
+
+#btn_Red.button:hover{
+	animation-name: btn_Red_pulse;
+	animation-duration: 0.75s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+.check{
+	margin: 0;
+	padding: 0;
+	border: 1px solid #fff;
+}
+
+
+
+
+
+
+/* MENU/MENU ITEMS: */
+
+.menu{
+	background-color: @shade0;
+	padding: 2px;
+	border-radius: 0;
+}
+
+.menuitem{
+	border-left: 1.5px solid @primary_0;
+	background-color: @shade1;
+	color: rgb(175, 175, 175);
+	padding: 5px;
+}
+
+.menuitem:active{
+	border-left: 7.5px solid @primary_1;
+}
+
+.menuitem:hover{
+	border-left: 5px solid @primary_0;
+	background-color: @shade2;
+}
+
+.menuitem.check,
+.menuitem.radio{
+/*	background-color: @altprimary_0; */
+}
+
+GtkCheckButton{
+	background-color: transparent;
+}
+
+.cell{
+	background-color: @shade3;
+}
+
+
+
+#LAUNCHER_REPO_MANAGER{
+	background-color: @shade1;
+	border-bottom: solid 2.5px @primary_4;
+}
+
+
+
+/*SOURCE BLOCK:*/
+#EngineBlock{
+/*	background-image: repeating-linear-gradient(315deg, #BF6000 5px, #BF6000 20px, #ce6700 25px, #ce6700 35px);
+*/
+	background-color: @shade0;
+	box-shadow: 1px 1px 5px alpha(@altprimary_0, 0.8);
+}
+
+#EngineBlock > GtkLabel{
+	font: Sawasdee;
+/*	font-weight: bold; */
+	font-size: 12pt;
+	text-shadow: 0 2px @shade2;
+}
+
+
+#EngineBlock:selected,
+#EngineBlock:selected:focus {
+	box-shadow: 0px 0px 20px @primary_0;
+    color: @mainTextColour;
+}
+
+
+#EngineLaunchButton{
+	font-size: 10pt;
+	font-weight: bold;
+	text-shadow: 0 2px @shade2;
+	color: @mainTextColour;
+	background-image: repeating-linear-gradient(315deg, @primary_0 25px, @primary_0 50px, @primary_3 50px, @primary_3 55px);
+}
+
+#EngineLaunchButton:insensitive{
+	background-image: repeating-linear-gradient(315deg, @tertiary_3 5px, @tertiary_3 20px, @tertiary_4 25px, @tertiary_4 35px);
+	color: @shade0;
+}
+
+#EngineLaunchButton:hover{
+	background-image: repeating-linear-gradient(315deg, @primary_0 10px, @primary_0 25px, @primary_3 30px, @primary_3 40px);
+}
+
+#EngineLaunchButton:active{
+	color: #FFF;
+	font-weight: bold;
+	text-shadow: 0 2px @shade2;
+	background-image: repeating-linear-gradient(315deg, @primary_1 5px, @primary_1 20px, @primary_4 25px, @primary_4 35px);
+}
+
+
+
+#EngineLaunchButton_running:insensitive{
+	font-size: 10pt;
+	font-weight: bold;
+	text-shadow: 0 2px @shade2;
+	color: @mainTextColour;
+	
+	animation-name: Keyframes_EngineLaunchButton_running;
+	animation-duration: 20s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+#SourceEngineBlock .background{
+	background: transparent;
+}
+
+
+
+/* UTILITY BAR */
+
+#LAUNCHERUTILITYBAR{
+	box-shadow: inset -3px 0px 10px @shade1; 
+	border-right: 2.5px solid @shade1;
+}
+
+
+/* PROGRESS BAR */
+
+GtkProgressBar{
+	border-radius: 0;
+	-GtkProgressBar-min-horizontal-bar-height: 5px;
+}
+
+.progressbar{
+	border-radius: 0;
+	background-color: @altprimary_0;
+/*	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+*/
+}
+
+.progressbar.vertical{
+	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+.progressbar.left,
+.progressbar.right{
+	background-color: @altprimary_1;
+}
+
+.progressbar.pulse{
+	background-color: @secondary_0;
+}
+
+.progressBar.trough{
+	background-color: @shade3;
+	border: 2px solid @shade3;
+}
+
+#PROGRESSBAR_SPECIAL.trough{
+	border: none;
+	background-color: @shade2;
+	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+#LAUNCHERUTILITYBAR > GtkProgressBar{
+
+}
+
+
+
+.trough{
+	color: @mainTextColour;
+	background-color: @shade1;
+}
+
+GtkLevelBar{
+	-GtkLevelBar-min-block-width: 30;
+	-GtkLevelBar-min-block-height: 7;
+	border-radius: 0;
+}
+
+.level-bar.trough {
+	animation-name: levelBarPulse;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+    padding: 2px;
+}
+
+.level-bar.indicator-discrete.fill-block {	
+	background-color: @altprimary_0;
+	border: 1px solid @altprimary_3;	    
+}
+
+.level-bar.fill-block.empty-fill-block {
+	background-color: @shade0;
+	border: none;
+}
+
+
+/* SCROLLED WINDOW */
+.scrollbar{
+
+	background-clip: padding-box;
+    -GtkRange-trough-border: 2;
+    -GtkScrollbar-has-backward-stepper: 0;
+    -GtkScrollbar-has-forward-stepper: 0;
+    -GtkRange-slider-width: 5;
+    -GtkScrollbar-min-slider-length: 15;
+    -GtkRange-stepper-spacing: 0;
+    -GtkRange-trough-under-steppers: 1;	
+	border-color: @shade0;
+	border-radius: 0;
+	margin: 0;
+	background-color: alpha(@primary_0, 0.2);
+}
+
+.scrollbar.slider{
+	background-color: alpha(@primary_1, 0.7);
+	border-radius: 3px;
+}
+
+
+.overshoot.top{
+	background-image: -gtk-gradient(radial, center top, 0, center top, 0.6, from(alpha(@secondary_1, 0.2)), to(alpha(@secondary_4, 0)));
+  background-size: 100% 60%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-color: transparent;
+}
+
+.overshoot.bottom {
+	background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(alpha(@secondary_1, 0.2)), to(alpha(@secondary_4, 0)));  background-size: 100% 60%;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-color: transparent;
+}
+
+.overshoot.left {
+	background-image: -gtk-gradient(radial, left center, 0, center top, 0.6, from(alpha(@secondary_1, 0.2)), to(alpha(@secondary_4, 0)));  background-size: 60% 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-color: transparent;
+}
+
+.overshoot.right {
+	background-image: -gtk-gradient(radial, right center, 0, center top, 0.6, from(alpha(@secondary_1, 0.2)), to(alpha(@secondary_4, 0)));  background-size: 60% 100%;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-color: transparent;
+}
+
+
+
+
+
+/* ACTION BAR */
+.action-bar{
+	padding: 4px;
+	background-color: @shade1;
+	border-top: 2.5px solid @primary_4;
+}
+
+
+
+
+
+/* INFO BAR */
+.info,
+.question,
+.warning,
+.error{
+	border: none;
+	color: #FFF;
+	font-weight: normal;
+	font-size: 7pt;
+}
+
+
+.info, .question{
+	background-color: @altprimary_2;
+}
+
+.warning{
+	background-color: @secondary_2;
+}
+
+.error{
+	background-color: @secondary_0;
+}
+
+
+
+
+
+
+
+GtkFlowBox .grid-child:selected{
+	padding: 0px;
+	border-radius: 0;
+	border: 0;
+	color: @mainTextColour;
+}
+
+
+
+
+/* NOTEBOOK */
+.notebook{
+    -GtkNotebook-initial-gap: 0;
+    -GtkNotebook-tab-overlap: 0;
+    -GtkNotebook-tab-curvature: 0;
+    -GtkWidget-focus-line-width: 0;
+    -GtkWidget-focus-padding: 0;
+    padding: 0;
+    background-color: @shade1;
+}
+
+.notebook.header{
+	border: none;
+	background-color: @shade0;
+}
+
+.notebook.frame{
+    border-bottom: 2.5px solid @primary_4;
+}
+
+.notebook GtkViewport, .notebook GtkTextView{
+	border: 0;
+	background-color: @shade1;
+}
+
+.notebook tab GtkLabel{
+	color: @mainTextColour;
+	border: none;
+}
+
+.notebook tab{
+	margin: 0px;
+	background-color: @shade2;
+	padding: 10px;
+	border: none;
+	border-radius: 0px;
+}
+
+.notebook tab:active{
+	background-color: @shade3;
+	border: 0px;
+	border-bottom: 3px solid @primary_0;
+}
+
+.notebook tab:hover{
+	background-color: @shade3;
+}
+
+
+
+
+/* ENTRY */
+.entry{
+	background-clip: padding-box;
+	padding: 2.5px;
+	color: @mainTextColour;
+	background-color: @shade2;
+	border: none;
+	border-radius: 1px;
+
+}
+
+.entry:active{
+	border: solid 5px @primary_0;
+}
+
+.entry.frame{
+	border: none;
+}
+
+.entry:focus{
+	background-color: @shade1;
+	border: none;
+}
+
+.entry:selected,
+.entry:selected:focus{
+	background-color: @shade1;
+}
+
+
+
+
+.separator{
+	-GtkWidget-wide-separators: 1;
+	-GtkWidget-separator-width: 2;
+	-GtkWidget-separator-height: 2;
+	border: solid 1.5px @secondary_4;
+}
+
+.menuitem.separator{
+	color: @secondary_4;
+}
+
+

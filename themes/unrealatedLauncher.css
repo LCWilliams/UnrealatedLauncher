@@ -155,9 +155,24 @@ GtkButton{
 	background-color: @shade1;
 }
 
+@keyframes btn_Red_pulse{
+	0%		{background-color: rgb(100, 0, 0);}
+	50%		{background-color: rgb(150, 0, 0);}
+	100%	{background-color: rgb(100, 0, 0);}
+}
+
 #btn_Red{
 	padding: 0;
-	color: rgb(150, 0, 0);
+	color: white;
+	background-color: rgba(100, 0, 0, 0.75);
+
+}
+
+#btn_Red.button:hover{
+	animation-name: btn_Red_pulse;
+	animation-duration: 0.75s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
 }
 
 .check{
@@ -284,6 +299,26 @@ GtkCheckButton{
 	font-weight: bold;
 	text-shadow: 0 2px @shade2;
 	background-image: repeating-linear-gradient(315deg, @primary_1 5px, @primary_1 20px, @primary_4 25px, @primary_4 35px);
+}
+
+@keyframes Keyframes_EngineLaunchButton_running{
+	0%		{ background-image: repeating-linear-gradient(315deg, @tertiary_3 0%, @tertiary_4 50%, @tertiary_4 55%);}
+	25%		{ background-image: repeating-linear-gradient(315deg, @primary_3 0%, @primary_4 90%, @primary_3 100%);}
+	75%		{ background-image: repeating-linear-gradient(315deg, @primary_3 0%, @primary_4 10%, @primary_3 100%);}
+	100%	{ background-image: repeating-linear-gradient(315deg, @tertiary_3 0%, @tertiary_4 50%, @tertiary_4 55%);}
+}
+
+
+#EngineLaunchButton_running:insensitive{
+	font-size: 10pt;
+	font-weight: bold;
+	text-shadow: 0 2px @shade2;
+	color: @mainTextColour;
+	
+	animation-name: Keyframes_EngineLaunchButton_running;
+	animation-duration: 20s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
 }
 
 #SourceEngineBlock .background{

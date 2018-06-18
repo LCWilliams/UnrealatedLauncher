@@ -68,6 +68,11 @@ namespace UnrealatedLauncher{
 	
 	
 	Glib::RefPtr<Gtk::Application> ref_application;
+	// Page Refs:
+	UnrealatedLauncher::Launcher_ProjectTab* ref_projectTab;
+	UnrealatedLauncher::Launcher_EngineTab* ref_engineTab;
+	UnrealatedLauncher::Launcher_MarketTab* ref_marketTab;
+	UnrealatedLauncher::Launcher_CommunityTab* ref_communityTab;
 	
 	protected:
 // VARIABLES
@@ -86,12 +91,6 @@ namespace UnrealatedLauncher{
 					menuItem_Launcher_RepoManager;
 	Gtk::Menu v_LauncherMenu;
 	
-	// Page Refs:
-	UnrealatedLauncher::Launcher_ProjectTab* v_projectsTabRef;
-	UnrealatedLauncher::Launcher_EngineTab* v_enginesTabRef;
-	UnrealatedLauncher::Launcher_MarketTab* v_marketTabRef;
-	UnrealatedLauncher::Launcher_CommunityTab* v_communityTabRef;
-	
 	// Progress Bars:
 	Gtk::ProgressBar	v_ProjectsProgressBar,
 						v_EnginesProgressBar,
@@ -105,8 +104,8 @@ namespace UnrealatedLauncher{
 	Gtk::Grid v_UtilityBar;
 	
 	// Settings window;
-	UnrealatedSettings* v_settingsRef; // Used to call initial run functions.
-	UnrealatedLauncherRepoManager* v_launcherRepoManagerRef;
+	UnrealatedSettings* ref_settings; // Used to call initial run functions.
+	UnrealatedLauncherRepoManager* ref_launcherRepoManager;
 	
 
 // FUNCTIONS
@@ -121,8 +120,9 @@ namespace UnrealatedLauncher{
 	void on_Settings_Clicked();
 	void menuItem_Launcher_RepoManager_clicked();
 
-
+	// TIMEOUTS:
 	bool launcherIdle(); // Idle Update.
+	bool idle_middleMen();
 
 
 	void ReadPreferences(); // Reads the preferences file and applies [general] settings.
@@ -137,9 +137,13 @@ class UnrealatedSettings : public Gtk::Grid{
 		UnrealatedSettings();
 		virtual ~UnrealatedSettings();
 		
-		UnrealatedLauncherWindow* v_windowRef;
+		UnrealatedLauncherWindow* ref_window;
 		void missingPrefs(){ btn_confirmSettings_clicked(); } // Public function to cause the file to be created.
 		void readPreferences(); // Reads the Ini file and changes the buttons accordingly
+		
+		bool LauncherSettings_Get_BackgroundSync();
+		bool launcherSettings_Get_RegenLists();
+		int	 launcherSettings_get_syncInterval();
 		
 		// PUBLIC SETTINGS:
 			// General:
@@ -223,6 +227,7 @@ class UnrealatedSettings : public Gtk::Grid{
 		
 		void btn_backgroundSync_clicked();
 		
+		
 		void settings_writeSettingsVariables();	// Reads the ini settings and stores them in public variables.
 		
 	// Utility:
@@ -243,13 +248,21 @@ class UnrealatedLauncherRepoManager : public Gtk::Grid{
 		void launcherRepoManager_setSettingsReference(UnrealatedSettings* p_settingsReference);
 		void launcherRepoManager_setStatusFields(double p_progressPercent, string p_task, string p_taskProgress);	// Updates the status elements.
 		
+		void btn_manage_update_clicked();
+		void btn_manage_updateAll_clicked();
+		
+		bool RepoManager_get_login(){	cout << "Password:" << threadComm_password << endl; return !threadComm_password.empty(); }
+		
 // INTER-THREAD COMMUNICATION:
-		bool threadComm_onlineTaskBusy = false;	// Used to check if an online task is busy, and used by timeouts.
-		bool threadComm_loginPrompt = false;
-		bool threadComm_attemptedLoginWithSavedInfo = false; 	// Used by IF within credential callback to either prompt a login, or use existing credentials.
-//		unsigned int threadComm_currentTask = 0;// Incremental int, used by a switch within timeouts for efficiency.
+		bool	threadComm_onlineTaskBusy = false,	// Used to check if an online task is busy, and used by timeouts.
+				threadComm_multiStageTask = false,	// If true, "onlineTaskBusy" is not set to false by the individual thread task.
+				threadComm_loginPrompt = false,
+				threadComm_attemptedLoginWithSavedInfo = false, 	// Used by IF within credential callback to either prompt a login, or use existing credentials.
+				threadComm_fetchProg_indexTaskAdded = false,		// Used to increment the task counter once in a function that's called repeatedly.
+				threadComm_fetchProg_fetchTaskAdded = false;
+		
 		condition_variable threadComm_loginPrompt_conditionVar;		// Condition variable used to pause the onlineThread if a login prompt is called.
-
+		
 		mutex threadComm_mutex_currentStage;	// Mutex that protects the thread_comm_* variables.
 		string threadComm_username, threadComm_password;	// Git Username & password set from Login prompt.
 
@@ -258,13 +271,11 @@ class UnrealatedLauncherRepoManager : public Gtk::Grid{
 		git_repository*	repoManager_repo;
 		git_remote*		repoManager_remoteRepo;
 		git_cred*		repoManager_gitCredential;
-		git_transport* repoManager_transport;
+		git_transport*	repoManager_transport;
+		vector<string>	repoManager_objectIDsOfTags = {},	// Vector of TAGGED Object IDs / Summaries. 
+						repoManager_objectSummaryOfTags = {};
 
-		const char *repoManager_RepoURL = "https://github.com/EpicGames/UnrealEngine.git"; 
-
-
-//		const char *repoManager_RepoURL = "git://github.com/libgit2/TestGitRepository.git"; 
-	
+		const char *repoManager_RepoURL = "https://github.com/EpicGames/UnrealEngine.git";
 
 		// UI Buffer
 		string	threadComm_repoStatusText = "",				// Text used to update the repository status.
@@ -338,6 +349,7 @@ class UnrealatedLauncherRepoManager : public Gtk::Grid{
 
 // OPTIONS:
 //		Gtk::Button btn_options_stopSync;
+		Gtk::CheckButton btn_options_lists_replace;
 		
 
 
@@ -349,12 +361,15 @@ class UnrealatedLauncherRepoManager : public Gtk::Grid{
 
 		void btn_manage_getNew_clicked();
 		void btn_manage_generateLists_clicked();
-		void btn_manage_update_clicked();
-		void btn_manage_updateAll_clicked();
+// Moved to public:
+//		void btn_manage_update_clicked();
+//		void btn_manage_updateAll_clicked();
 		void btn_manage_clearRepo_clicked();
 		void btn_manage_clearRepoCancel_clicked();
 		void btn_manage_clearRepoConfirm_clicked();
-			int clearRepo_calledCount; // Incremented each time the function is called.  Used as bool for final loop to set currentStage.
+			unsigned int clearRepo_calledCount; // Incremented each time the function is called.  Used as bool for final loop to set currentStage.
+			unsigned int clearRepo_filesTotal;	// Number of files counted.  Used to update the progress bar.
+				float clearRepo_filesDeleted;	// Number of files processed.
 		void btn_status_cancel_clicked();
 		void btn_status_cancel_force_clicked();
 		
@@ -368,12 +383,15 @@ class UnrealatedLauncherRepoManager : public Gtk::Grid{
 		
 	//	Git related | Defined in Launcher_RepoManager_Git.cpp
 		bool RepoManagerGit_OpenRepo();			// Opens the launcher repository.  Returns FALSE on error/doesn't exist.
-		void RepoManagerGit_SetCloneOptions(git_clone_options* p_cloneOptions);	// Sets Clone Options.
-		void RepoManagerGit_SetFetchOptions(git_fetch_options* p_fetchOptions);	// Sets fetch options.
+		bool RepoManagerGit_OpenRemote();		// Creates a remote repository.  Returns FALSE on error.
+		void RepoManagerGit_SetCloneOptions(git_clone_options* p_cloneOptions);		// Sets Clone Options.
+		void RepoManagerGit_SetFetchOptions(git_fetch_options* p_fetchOptions);		// Sets fetch options.
+		bool RepoManagerGit_TagMatches(string p_message);	// Returns TRUE if the object matches a tag.
 	
 	// Timeout Functions (Inter-thread communication: declared in Launcher_Repomanager_Threads.cpp
 		void RepoManager_timeout_updateGUI();// Repetative code, updates all GUI items within Status.
 		bool RepoManager_timeout();
+		bool idle_backgroundSync();
 		
 	// Thread Functions:
 		void RepoManager_thread_GetNew();
@@ -382,6 +400,7 @@ class UnrealatedLauncherRepoManager : public Gtk::Grid{
 		void RepoManager_thread_updateAll();
 		void RepoManager_thread_clearRepo();
 		void RepoManager_thread_clearRepoPath(string p_directory);
+		void RepoManager_thread_clearRepo_count(string p_path); // Counts All the files for removal.
 		void RepoManager_thread_taskFailed(string p_status, string p_consoleError); // Status for GUI text, console error printed to the terminal. Closes Libgit2.
 		
 		// Probably redundant:

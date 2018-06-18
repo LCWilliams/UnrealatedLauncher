@@ -16,7 +16,7 @@
    viewBox="0 0 79.374997 46.566668"
    version="1.1"
    id="svg45"
-   inkscape:version="0.92.2 (unknown)"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="engine_image_default.svg">
   <defs
      id="defs39">
@@ -82,10 +82,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="138.24278"
-     inkscape:cy="116.56795"
+     inkscape:cx="77.885637"
+     inkscape:cy="102.28224"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="true"
      units="px"
      inkscape:window-width="1920"
@@ -105,7 +105,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -150,14 +150,14 @@
          sodipodi:role="line">LAUNCHER</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:8.46666622px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:0.41624367;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:normal;font-size:8.46666622px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:0.19689119;stroke:none;stroke-width:0.26458332;"
        x="25.135414"
-       y="27.289885"
+       y="30.786161"
        id="text2089"><tspan
          sodipodi:role="line"
          id="tspan2087"
          x="25.135414"
-         y="27.289885"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;fill:#ffffff;fill-opacity:0.41624367;stroke-width:0.26458332">ENGINE</tspan></text>
+         y="30.786161"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;fill:#ffffff;fill-opacity:0.19689119;stroke-width:0.26458332;">ENGINE</tspan></text>
   </g>
 </svg>

@@ -17,8 +17,6 @@ int main(int argc, char *argv[]){
 	//Create default folders:
 	mkdir("launcherRepo", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	mkdir("engines", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	mkdir("./engines/install", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	mkdir("./engines/source", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	
 	// Folder for user specific items:
 	system("mkdir -p ~/.unrealatedLauncher");
@@ -74,11 +72,10 @@ int main(int argc, char *argv[]){
 		ini.SetBoolValue("Engines", "BackgroundRepoSync_RegenList", true);
 		
 		ini.SetValue("Engines", "launcherRepo", "./launcherRepo");
-		ini.SetValue("Engines", "defaultInstallDir", "./engines/install");
-		ini.SetValue("Engines", "defaultSourceDir", "./engines/source");
+		ini.SetValue("Engines", "defaultInstallDir", "./engines");
 		
-		ini.SetDoubleValue("Engines", "maxTaggedCommits", 30);
-		ini.SetDoubleValue("Engines", "maxCommits", 150);
+		ini.SetDoubleValue("Engines", "maxTaggedCommits", 200);
+		ini.SetDoubleValue("Engines", "maxCommits", 300);
 		ini.SetBoolValue("Engines", "defaultShowTaggedCommits", true);
 		ini.SetDoubleValue("Engines", "commitWrap", 3);
 		// Write Market:
@@ -96,12 +93,12 @@ int main(int argc, char *argv[]){
 	Glib::RefPtr<Gtk::Application> UnrealatedLauncherApplication = Gtk::Application::create(argc, argv, "LCWilliams.UnrealatedLauncher");
 	UnrealatedLauncher::UnrealatedLauncherWindow window;
 	window.ref_application = UnrealatedLauncherApplication;
-
+	
 	// Themes:
 	// If use system theme is false, apply custom theme...
 	if(!useSysTheme){
 		Glib::RefPtr<Gtk::CssProvider> cssProvider = Gtk::CssProvider::create();
-		cssProvider->load_from_path("../themes/unrealatedLauncher.css");
+		cssProvider->load_from_path("../themes/defaultTheme.css");
 		
 		Glib::RefPtr<Gtk::StyleContext> styleContext = Gtk::StyleContext::create();
 		

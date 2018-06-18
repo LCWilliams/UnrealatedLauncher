@@ -9,6 +9,7 @@
 #define LAUNCHER_GLOBAL
 
 #include <string>
+#include <gtkmm/application.h>
 
 namespace UnrealatedLauncherGlobal{
 	
@@ -17,7 +18,6 @@ namespace UnrealatedLauncherGlobal{
 	extern std::string	launcherRepositoryDir;		// Path to the launcher repository directory.
 	extern bool			repoManagerRememberLogin;	// Bool that determines whether the user wants to save their details.
 	extern std::string	repoManagerLoginFile;		// Path to a file containing login information.
-	
 	
 } // END - Global launcher namespace.
 

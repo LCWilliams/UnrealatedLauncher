@@ -25,18 +25,19 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 	
 	// CREATE ALL WINDOWS, SET GTK TO MANAGE:	
 	UnrealatedLauncher::Launcher_ProjectTab *v_ProjectTab = Gtk::manage(new UnrealatedLauncher::Launcher_ProjectTab);
-		v_projectsTabRef = v_ProjectTab;
+		ref_projectTab = v_ProjectTab;
 	UnrealatedLauncher::Launcher_EngineTab *v_EngineTab = Gtk::manage(new UnrealatedLauncher::Launcher_EngineTab);
-		v_enginesTabRef = v_EngineTab;
+		ref_engineTab = v_EngineTab;
+		v_EngineTab->ref_mainWindow = this;
 	UnrealatedLauncher::Launcher_MarketTab *v_MarketTab = Gtk::manage(new UnrealatedLauncher::Launcher_MarketTab);
-		v_marketTabRef = v_MarketTab;
+		ref_marketTab = v_MarketTab;
 	UnrealatedLauncher::Launcher_CommunityTab *v_CommunityTab = Gtk::manage(new UnrealatedLauncher::Launcher_CommunityTab);
-		v_communityTabRef = v_CommunityTab;
+		ref_communityTab = v_CommunityTab;
 	
-	UnrealatedSettings *v_settingsRef = Gtk::manage(new UnrealatedSettings);
-	UnrealatedLauncherRepoManager *v_launcherRepoManagerRef = Gtk::manage(new UnrealatedLauncherRepoManager);
-	v_repoManagerRevealer.add(*v_launcherRepoManagerRef);
-	v_launcherRepoManagerRef->launcherRepoManager_setSettingsReference(v_settingsRef);
+	UnrealatedSettings *ref_settings = Gtk::manage(new UnrealatedSettings);
+	UnrealatedLauncherRepoManager *ref_launcherRepoManager = Gtk::manage(new UnrealatedLauncherRepoManager);
+	v_repoManagerRevealer.add(*ref_launcherRepoManager);
+	ref_launcherRepoManager->launcherRepoManager_setSettingsReference(ref_settings);
 
 
 
@@ -48,19 +49,20 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 	v_settingsRevealer.set_transition_duration(750);
 	
 	// Pass settings reference to window object;
-	v_settingsRef->v_windowRef = this;
-	v_settingsRevealer.add(*v_settingsRef);
+	ref_settings->ref_window = this;
+	v_settingsRevealer.add(*ref_settings);
 	
 //	REPO MANAGER:
 	v_MainWindowGrid->attach(v_repoManagerRevealer, 1, 2, 1, 1);
 	v_repoManagerRevealer.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
 	v_repoManagerRevealer.set_transition_duration(750);
-	v_launcherRepoManagerRef->ref_window = this;
+	ref_launcherRepoManager->ref_window = this;
 
 	v_MainWindowGrid->attach(v_repoManagerProgressBar, 1, 3, 1, 1);
 	v_repoManagerProgressBar.set_name("PROGRESSBAR_SPECIAL");
 
 //	END LAUNCHER SETTINGS 
+
 
 
 
@@ -189,9 +191,13 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 	show_all();
 	
 	ReadPreferences();
-	v_launcherRepoManagerRef->launcherRepoManager_setup();
+	ref_launcherRepoManager->launcherRepoManager_setup();
+	v_repoManagerProgressBar.hide();
 	
+	// IDLES:
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::launcherIdleCheck), 500);
+	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::idle_middleMen), 500);
+	
 	
 } // END - Unrealated Window
 
@@ -269,6 +275,8 @@ void UnrealatedLauncherWindow::menuItem_Launcher_RepoManager_clicked(){
 	menuItem_Launcher_Settings.set_sensitive(false);
 	menuItem_Launcher_RepoManager.set_sensitive(false);
 //	v_launcherRepoManagerRef->launcherRepoManager_setup();
+	// MIDDLEMAN: EngineAdd- sets sensitivity.
+	ref_engineTab->middleMan_openRepoManager_bool = true;
 }
 
 
@@ -288,7 +296,7 @@ void UnrealatedLauncherWindow::ReadPreferences(){
 	
 	if(temp_errorCheck < 0){
 		// File doesn't exist
-		v_settingsRef->missingPrefs();
+		ref_settings->missingPrefs();
 
 	} else if (ini.GetBoolValue("General", "FirstRun")){
 		ini.SetBoolValue("General", "FirstRun", false);
@@ -339,11 +347,13 @@ void UnrealatedLauncherWindow::repoManager_closed(){
 	v_repoManagerRevealer.set_reveal_child(false);
 }
 
+// IDLES:
+
 bool UnrealatedLauncherWindow::launcherIdleCheck(){ // Runs every full second to check and then connect LauncherIdle.
-	int totalTasks = v_projectsTabRef->GetPageTasks(); // + other pages;
-	totalTasks += v_enginesTabRef->GetPageTasks();
-	totalTasks += v_marketTabRef->GetPageTasks();
-	totalTasks += v_communityTabRef->GetPageTasks();
+	int totalTasks = ref_projectTab->GetPageTasks(); // + other pages;
+	totalTasks += ref_engineTab->GetPageTasks();
+	totalTasks += ref_marketTab->GetPageTasks();
+	totalTasks += ref_communityTab->GetPageTasks();
 	
 	if(totalTasks != 0){ 
 		Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::launcherIdle), 50);
@@ -363,11 +373,11 @@ bool UnrealatedLauncherWindow::launcherIdle(){ // Idle Update.
 	int pageTasks = 0; // Set per each page.
 	
 	// Project Tab:
-	pageTasks = v_projectsTabRef->GetPageTasks();
+	pageTasks = ref_projectTab->GetPageTasks();
 	totalTasks += pageTasks;
 	if(pageTasks != 0){
-		if(pageTasks == 1 && v_projectsTabRef->GetPageTaskProgress() != 0){
-			v_ProjectsProgressBar.set_fraction(v_projectsTabRef->GetPageTaskProgress());
+		if(pageTasks == 1 && ref_projectTab->GetPageTaskProgress() != 0){
+			v_ProjectsProgressBar.set_fraction(ref_projectTab->GetPageTaskProgress());
 		} else{
 			v_ProjectsProgressBar.pulse();
 		}
@@ -375,36 +385,36 @@ bool UnrealatedLauncherWindow::launcherIdle(){ // Idle Update.
 
 	
 	// Engine Tab:
-	pageTasks = v_enginesTabRef->GetPageTasks();
+	pageTasks = ref_engineTab->GetPageTasks();
 	totalTasks += pageTasks;
 	if(pageTasks != 0){
 //		v_EnginesProgressBar.set_fraction(0);
-		if(pageTasks == 1 && v_enginesTabRef->GetPageTaskProgress() != 0){
-			v_EnginesProgressBar.set_fraction(v_enginesTabRef->GetPageTaskProgress());
+		if(pageTasks == 1 && ref_engineTab->GetPageTaskProgress() != 0){
+			v_EnginesProgressBar.set_fraction(ref_engineTab->GetPageTaskProgress());
 		} else{
 			v_EnginesProgressBar.pulse();
 		}
 	}  // END - Engine Tab tasks. 
 	
 	// Market Tab:
-	pageTasks = v_marketTabRef->GetPageTasks();
+	pageTasks = ref_marketTab->GetPageTasks();
 	totalTasks += pageTasks;
 	if(pageTasks != 0){ // If page has tasks:
 		if(pageTasks > 1){ // If tasks is higher than 1, pulse.
 			v_MarketProgressBar.pulse();
 		}else{
-			v_MarketProgressBar.set_fraction(v_marketTabRef->GetPageTaskProgress());
+			v_MarketProgressBar.set_fraction(ref_marketTab->GetPageTaskProgress());
 		} // End - Else.
 	} // END - Market tab tasks
 
 	// Community Tab:
-	pageTasks = v_communityTabRef->GetPageTasks();
+	pageTasks = ref_communityTab->GetPageTasks();
 	totalTasks += pageTasks;
 	if(pageTasks != 0){ // If page has tasks:
 		if(pageTasks > 1){ // If tasks is higher than 1, pulse.
 			v_CommunityProgressBar.pulse();
 		}else{
-			v_CommunityProgressBar.set_fraction(v_communityTabRef->GetPageTaskProgress());
+			v_CommunityProgressBar.set_fraction(ref_communityTab->GetPageTaskProgress());
 		} // End - Else.
 	} // END - Community tab tasks
 	
@@ -417,3 +427,20 @@ bool UnrealatedLauncherWindow::launcherIdle(){ // Idle Update.
 		return totalTasks;
 	}
 } // END - Launcher Idle.
+
+bool UnrealatedLauncherWindow::idle_middleMen(){	// Idle Middleman that checks middleman variables.
+// Engine Tab:
+	// Repo Manager:
+	if(ref_engineTab->middleMan_openRepoManager_bool){
+		// Open repo manager from EngineAdd:Sidebar.
+		menuItem_Launcher_RepoManager_clicked(); // Open Repo Manager.
+		v_settingsRevealer.set_reveal_child(false);	// Hide settings if they were open.
+		ref_engineTab->ref_EngineAdd->set_sensitive(false);
+	} else {
+		ref_engineTab->ref_EngineAdd->set_sensitive(true);
+	}
+	
+	
+	// Endless repeat:
+	return true;
+} // END - Middelman Idle.
