@@ -10,5 +10,9 @@
       <Environment/>
       <Project Name="UnrealatedLauncher" ConfigName="Release"/>
     </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release2" Selected="no">
+      <Environment/>
+      <Project Name="UnrealatedLauncher" ConfigName="Release"/>
+    </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

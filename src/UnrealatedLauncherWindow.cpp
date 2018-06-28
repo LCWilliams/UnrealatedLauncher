@@ -6,12 +6,22 @@ using namespace UnrealatedLauncher;
 
 UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 
-	btn_link_help("https://docs.unrealengine.com/latest/INT/", "GIB MUNNIES PLZ"),
 	menuItem_Launcher_ToggleUtilityBar("Utility Bar"),
 	menuItem_Launcher_About("About"),
 	menuItem_Launcher_Quit("Quit"),
 	menuItem_Launcher_Settings("Settings"),
-	menuItem_Launcher_RepoManager("Repo Manager")
+	menuItem_Launcher_RepoManager("Repo Manager"),
+	
+//	utilityBar_links_frame("Links"),
+	
+	txt_utilitybar_currentCommit_label("Current Commit:"),
+	txt_utilitybar_currentCommit("No commits found"),
+
+	btn_link_patreon("https://patreon.com/LCWilliams_unrealatedLauncher", "Support the launcher"),
+	btn_link_youtube("https://www.youtube.com/user/UnrealDevelopmentKit", "Youtube"),
+	btn_link_facebook("https://www.facebook.com/UnrealEngine/", "Facebook"),
+	btn_link_twitter("https://twitter.com/UnrealEngine", "Twitter"),
+	btn_link_wiki("https://docs.unrealengine.com/latest/INT/", "Wiki")
 
 {		// UNREALATED LAUNCHER WINDOW
 	set_default_size(1200, 800);
@@ -23,7 +33,7 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 	v_MainWindowGrid->set_column_homogeneous(false);
 	add(*v_MainWindowGrid); // Add to window
 	
-	// CREATE ALL WINDOWS, SET GTK TO MANAGE:	
+	// CREATE ALL WINDOWS, SET GTK TO MANAGE
 	UnrealatedLauncher::Launcher_ProjectTab *v_ProjectTab = Gtk::manage(new UnrealatedLauncher::Launcher_ProjectTab);
 		ref_projectTab = v_ProjectTab;
 	UnrealatedLauncher::Launcher_EngineTab *v_EngineTab = Gtk::manage(new UnrealatedLauncher::Launcher_EngineTab);
@@ -40,8 +50,6 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 	ref_launcherRepoManager->launcherRepoManager_setSettingsReference(ref_settings);
 
 
-
-	
 
 //	LAUNCHER SETTINGS : Placed here for Z ordering.
 	v_MainWindowGrid->attach(v_settingsRevealer, 1, 1, 1, 1);
@@ -156,6 +164,7 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 
 
 // UTILITY BAR
+
 	v_UtilityBar.set_name("LAUNCHERUTILITYBAR");
 //	v_UtilityBar.set_border_width(3);
 	// Attach to revealer:
@@ -167,22 +176,69 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 	v_MainWindowGrid->attach(v_UtilityBarRevealer, 0, 0, 1, 6);
 	// Settings:
 	v_UtilityBar.set_size_request(300, -1);
-	v_UtilityBar.set_vexpand();
+	v_UtilityBar.set_vexpand(true);
 	v_UtilityBar.set_hexpand(false);
+	v_UtilityBar.set_row_homogeneous(false);
+	v_UtilityBar.set_column_homogeneous(false);
+
+
+// Commit Info:
+	v_UtilityBar.attach(txt_utilitybar_currentCommit_label, 0, 0, 1, 1);
+		txt_utilitybar_currentCommit_label.set_margin_top(20);
+//		txt_utilitybar_currentCommit_label.set_margin_bottom(20);
+		txt_utilitybar_currentCommit_label.set_halign(Gtk::ALIGN_START);
+	v_UtilityBar.attach(txt_utilitybar_currentCommit, 0, 1, 2, 1);
+		LauncherUtility::LauncherUtility_setLabelWrapSettings(&txt_utilitybar_currentCommit, 2, 270, Pango::ELLIPSIZE_NONE);
+		txt_utilitybar_currentCommit.set_margin_left(10);
+		txt_utilitybar_currentCommit.set_margin_right(10);
+		txt_utilitybar_currentCommit.set_margin_bottom(20);
+		txt_utilitybar_currentCommit.set_halign(Gtk::ALIGN_START);
+//		txt_utilitybar_currentCommit.set_hexpand(false);
 	
+	// Load ALL file, if exists, and get last commit:
+	string temp_listFileDir = UnrealatedLauncherGlobal::launcherHomeDir + "/lists/all.txt";	
+	if( LauncherUtility::LauncherUtility_checkFileExists( temp_listFileDir ) ){
+		
+		ifstream temp_inFileStream( temp_listFileDir.c_str() );
+		string temp_line;
+		int loop_iterations = 0;
+		while(getline(temp_inFileStream, temp_line) && loop_iterations != 2){
+			loop_iterations++;
+			if( loop_iterations == 2 ){
+				launcher_updateSidebar_currentCommit(temp_line);
+			}
+		} // END - While loop.
+		
+	} // END - If ALL (commits) file exists.
+
+
+/*	
 	// QuicKLaunch Button
 	v_UtilityBar.attach(btn_QuickLaunch, 0, 0, 1, 1);
 	btn_QuickLaunch.set_size_request(-1, 80);
 	btn_QuickLaunch.set_hexpand();
 	btn_QuickLaunch.set_border_width(10);
 	btn_QuickLaunch.signal_clicked().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::on_QuickLaunch_clicked));
-	// DEBUG: set name
-	btn_QuickLaunch.set_label("_NO ENGINE SET");
+*/
+
+
 	
-	// HelpLink
-	v_UtilityBar.attach(btn_link_help, 0, 1, 1, 1);
-	btn_link_help.set_valign(Gtk::ALIGN_FILL);
-	btn_link_help.set_hexpand();
+	Gtk::Separator *utilityBar_separator_links = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL));
+	v_UtilityBar.attach(*utilityBar_separator_links, 0, 9, 2, 1);
+	
+	// Links
+	v_UtilityBar.attach(utilityBar_links_frame, 0, 10, 2, 1);
+	LauncherUtility::LauncherUtility_setGridSettings(&utilitybar_links);
+	utilityBar_links_frame.add(utilitybar_links);
+	utilityBar_links_frame.set_valign(Gtk::ALIGN_END);
+	
+	utilitybar_links.attach(btn_link_wiki, 0, 0, 1, 1);
+	utilitybar_links.attach(btn_link_youtube, 1, 0, 1, 1);
+	utilitybar_links.attach(btn_link_facebook, 0, 1, 1, 1);
+	utilitybar_links.attach(btn_link_twitter, 1, 1, 1, 1);
+	utilitybar_links.attach(btn_link_patreon, 0, 2, 2, 1);
+	btn_link_patreon.set_valign(Gtk::ALIGN_FILL);
+	btn_link_patreon.set_hexpand();
 
 // END - UTILITY BAR
 
@@ -197,8 +253,7 @@ UnrealatedLauncherWindow::UnrealatedLauncherWindow():
 	// IDLES:
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::launcherIdleCheck), 500);
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherWindow::idle_middleMen), 500);
-	
-	
+
 } // END - Unrealated Window
 
 // Unrealated Launcher Window Definitions
@@ -215,11 +270,11 @@ void UnrealatedLauncher::UnrealatedLauncherWindow::on_QuitClicked(){
 void UnrealatedLauncher::UnrealatedLauncherWindow::on_AboutClicked(){
 	v_aboutDialogue.set_transient_for(*this);
 	v_aboutDialogue.set_program_name("Unrealated Launcher");
-	v_aboutDialogue.set_version("11.2017");
+	v_aboutDialogue.set_version("06-2018");
 	v_aboutDialogue.set_copyright("Lee Connor Williams");
-	v_aboutDialogue.set_comments("Bringing the Unreal Engine to Linux!");
+	v_aboutDialogue.set_comments("An unofficial Unreal Engine Launcher for the Linux Operating system!");
 	
-	std::ifstream fileStream("License.txt");
+	std::ifstream fileStream("../License.txt");
 	std::string fileContents( (std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
 	if(!fileContents.empty()){
 		v_aboutDialogue.set_license(fileContents);
@@ -326,7 +381,11 @@ void UnrealatedLauncherWindow::ReadPreferences(){
 			case 3: v_LauncherPageStack.set_visible_child("Community");
 			break;
 		}
-
+		
+	bool temp_showLatestCommit = ini.GetBoolValue("General", "UtilBar_ShowLatestCommit", true);
+	txt_utilitybar_currentCommit.set_visible(temp_showLatestCommit);
+	txt_utilitybar_currentCommit_label.set_visible(temp_showLatestCommit);
+	 
 } // END - ReadPreferences.
 
 
@@ -437,9 +496,8 @@ bool UnrealatedLauncherWindow::idle_middleMen(){	// Idle Middleman that checks m
 		v_settingsRevealer.set_reveal_child(false);	// Hide settings if they were open.
 		ref_engineTab->ref_EngineAdd->set_sensitive(false);
 	} else {
-		ref_engineTab->ref_EngineAdd->set_sensitive(true);
+		ref_engineTab->ref_EngineAdd->set_sensitive( !ref_launcherRepoManager->threadComm_onlineTaskBusy );
 	}
-	
 	
 	// Endless repeat:
 	return true;

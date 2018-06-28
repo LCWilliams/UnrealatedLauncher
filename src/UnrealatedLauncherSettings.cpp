@@ -16,7 +16,6 @@ UnrealatedSettings::UnrealatedSettings():
 	
 	btn_useSystemTheme("Use system theme"),
 	btn_utilityOpenOnDefault("Utility Bar open by default"),
-	btn_showLauncherRepoStatus("Show launcher repo status in Utility Bar"),
 	btn_showLatestCommit("Show latest commit in the Utility Bar"),
 	
 	btn_defaultPage(false), // Doesn't have entry.
@@ -117,9 +116,6 @@ UnrealatedSettings::UnrealatedSettings():
 
 	page_general_interface.attach(btn_utilityOpenOnDefault, 1, 2, 1, 1);
 		btn_utilityOpenOnDefault.set_tooltip_text("If checked, the utility bar will be open by default.");
-
-	page_general_interface.attach(btn_showLauncherRepoStatus, 1, 3, 1, 1);
-		btn_showLauncherRepoStatus.set_tooltip_text("If checked, the status of the launcher repo will be displayed in the utility bar.");
 
 	page_general_interface.attach(btn_showLatestCommit, 1, 4, 1, 1);
 		btn_showLatestCommit.set_tooltip_text("If checked, the latest commit of the launcher repo will be displayed in the utility bar.");
@@ -231,8 +227,9 @@ void UnrealatedSettings::btn_confirmSettings_clicked(){
 //		ini.SetBoolValue("General", "FirstRun", true);
 		ini.SetBoolValue("General", "UseSystemTheme", btn_useSystemTheme.get_active());
 		ini.SetBoolValue("General", "utilityBarOpen", btn_utilityOpenOnDefault.get_active());
-		ini.SetBoolValue("General", "UtilBar_ShowLauncherRepoStatus", btn_showLauncherRepoStatus.get_active());
 		ini.SetBoolValue("General", "UtilBar_ShowLatestCommit", btn_showLatestCommit.get_active());
+			ref_window->launcher_updateSidebar_showCurrentCommit(btn_showLatestCommit.get_active());
+		
 		ini.SetDoubleValue("General", "DefaultPage", btn_defaultPage.get_active_row_number());
 		ini.SetBoolValue("General", "RememberGitLogin", UnrealatedLauncherGlobal::repoManagerRememberLogin);
 	
@@ -271,11 +268,10 @@ void UnrealatedSettings::btn_confirmSettings_clicked(){
 	
 } // END - Confirm settings.
 
-void UnrealatedSettings::btn_resetAll_clicked(){	
+void UnrealatedSettings::btn_resetAll_clicked(){
 	// GENERAL:
 	btn_useSystemTheme.set_active(false);
 	btn_utilityOpenOnDefault.set_active(true);
-	btn_showLauncherRepoStatus.set_active(true);
 	btn_showLatestCommit.set_active(true);
 	btn_defaultPage.set_active(1);
 	
@@ -327,8 +323,7 @@ void UnrealatedSettings::readPreferences(){
 	
 	// GENERAL:
 	btn_useSystemTheme.set_active(ini.GetBoolValue("General", "UseSystemTheme"));
-	btn_utilityOpenOnDefault.set_active(ini.GetBoolValue("General", "utilityBarOpen"));
-	btn_showLauncherRepoStatus.set_active(ini.GetBoolValue("General", "UtilBar_ShowLauncherRepoStatus"));
+	btn_utilityOpenOnDefault.set_active(ini.GetBoolValue("General", "utilityBarOpen"));;
 	btn_showLatestCommit.set_active(ini.GetBoolValue("General", "UtilBar_ShowLatestCommit"));
 	btn_defaultPage.set_active(ini.GetDoubleValue("General", "DefaultPage"));
 	

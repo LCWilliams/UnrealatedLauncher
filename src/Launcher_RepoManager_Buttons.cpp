@@ -73,6 +73,8 @@ void UnrealatedLauncherRepoManager::btn_manage_clearRepoCancel_clicked(){
 }
 
 void UnrealatedLauncherRepoManager::btn_manage_clearRepoConfirm_clicked(){
+	threadComm_onlineTaskBusy = true;
+	
 	repoManager_manageButtons_frame.set_sensitive(false);
 	btn_manage_clearRepo_box.hide();
 	btn_manage_clearRepo.set_sensitive(true);
@@ -116,6 +118,8 @@ void UnrealatedLauncherRepoManager::btn_manage_getNew_clicked(){
 } // END - Getnew Clicked.
 
 void UnrealatedLauncherRepoManager::btn_manage_generateLists_clicked(){
+	threadComm_onlineTaskBusy = true;
+	
 	repoManager_manageButtons_frame.set_sensitive(false);
 	
 	RepoManager_updateRepoDir();
@@ -126,9 +130,8 @@ void UnrealatedLauncherRepoManager::btn_manage_generateLists_clicked(){
 
 	threadComm_currentStage = 0;
 	v_status_levelBar.set_max_value(1);
-	// Update Lists.
-	threadComm_onlineTaskBusy = true;
 
+	// Update Lists.
 	thread  thread_Getnew(&UnrealatedLauncherRepoManager::RepoManager_thread_GenerateLists, this);
 	thread_Getnew.detach();
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::RepoManager_timeout), 50);
@@ -136,6 +139,8 @@ void UnrealatedLauncherRepoManager::btn_manage_generateLists_clicked(){
 }
 
 void UnrealatedLauncherRepoManager::btn_manage_update_clicked(){
+	threadComm_onlineTaskBusy = true;
+
 	repoManager_manageButtons_frame.set_sensitive(false);
 	
 	threadComm_currentStage = 0;
@@ -144,12 +149,12 @@ void UnrealatedLauncherRepoManager::btn_manage_update_clicked(){
 	thread  thread_update(&UnrealatedLauncherRepoManager::RepoManager_thread_update, this);
 	thread_update.detach();
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::RepoManager_timeout), 50);
-	
-	threadComm_onlineTaskBusy = true;
-	
 }
 
 void UnrealatedLauncherRepoManager::btn_manage_updateAll_clicked(){
+	threadComm_onlineTaskBusy = true;
+	threadComm_multiStageTask = true;
+
 	repoManager_manageButtons_frame.set_sensitive(false);
 	
 	threadComm_currentStage = 0;
@@ -163,9 +168,6 @@ void UnrealatedLauncherRepoManager::btn_manage_updateAll_clicked(){
 	thread  thread_updateAll(&UnrealatedLauncherRepoManager::RepoManager_thread_updateAll, this);
 	thread_updateAll.detach();
 	Glib::signal_timeout().connect(sigc::mem_fun(*this, &UnrealatedLauncherRepoManager::RepoManager_timeout), 50);
-	
-	threadComm_onlineTaskBusy = true;
-	threadComm_multiStageTask = true;
 }
 
 void UnrealatedLauncherRepoManager::btn_status_cancel_clicked(){

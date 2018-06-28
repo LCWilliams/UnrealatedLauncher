@@ -138,8 +138,8 @@ void EngineBlock::EngineBlockSetup(){
 	v_InfoBar.add_action_widget(btn_infoBar_Okay, 0);
 	v_InfoBar.add_action_widget(btn_infoBar_ContinueInstall, 1);
 //		btn_infoBar_ContinueInstall.signal_clicked().connect(sigc::mem_fun(*this, &EngineBlock::InstallEngine));
-	v_InfoBar.add_action_widget(btn_infoBar_ConfirmDelete, 2);
 	v_InfoBar.add_action_widget(btn_infoBar_CancelDelete, 0);
+	v_InfoBar.add_action_widget(btn_infoBar_ConfirmDelete, 2);
 	v_InfoBar.set_hexpand(false);
 	
 	auto infobarActionArea = dynamic_cast<Gtk::Widget*>(v_InfoBar.get_action_area());
@@ -544,7 +544,9 @@ void EngineBlock::EngineBlock_thread_Delete_count(string p_path){
 		threadComm_delete_mutex.unlock();
 		
 	} // END - While loop.
-			
+	
+	cout << "DEBUG:	Found " << deleteEngine_filesTotal << " files to remove." << endl;
+	
 	closedir(directory);
 }
 
@@ -575,6 +577,7 @@ void EngineBlock::EngineBlock_thread_Delete(string p_path){
 		deleteEngine_filesDeleted++;
 		threadComm_delete_taskPercent = (double)deleteEngine_filesDeleted / deleteEngine_filesTotal;
 		threadComm_delete_taskText = next_file->d_name;
+		cout << "DEBUG:	Deletion: files removed: " << deleteEngine_filesDeleted << " " << endl;
 		threadComm_delete_mutex.unlock();
 		
 		std::remove(v_filePath);

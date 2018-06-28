@@ -58,7 +58,6 @@ int main(int argc, char *argv[]){
 		ini.SetBoolValue("General", "FirstRun", true);
 		ini.SetBoolValue("General", "UseSystemTheme", false);
 		ini.SetBoolValue("General", "utilityBarOpen", true);
-		ini.SetBoolValue("General", "UtilBar_ShowLauncherRepoStatus", true);
 		ini.SetBoolValue("General", "UtilBar_ShowLatestCommit", true);
 		ini.SetDoubleValue("General", "DefaultPage", 1);
 		ini.SetBoolValue("General", "RememberGitLogin", UnrealatedLauncherGlobal::repoManagerRememberLogin); // False

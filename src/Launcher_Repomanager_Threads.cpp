@@ -501,12 +501,15 @@ void UnrealatedLauncherRepoManager::RepoManager_thread_update(){
 	
 /*
 */
+
+	git_object *temp_object; // Object outside in order to survive for commit lookup (for summary).
+
 	if(git_merge(repoManager_repo, (const git_annotated_commit **)(&mergeHead), 1, &temp_mergeOptions, &temp_checkoutOptions) < 0){
 //		RepoManager_thread_taskFailed("Failed to Merge.", "Failed to merge changes.");
 		cout << "DEBUG:	Failed to merge: " << giterr_last()->message << endl << "		> Attempting a reset instead." << endl;
 		
-		git_object *temp_object;
 		git_object_lookup(&temp_object, repoManager_repo, &objectID, GIT_OBJ_ANY);
+
 		cout << "		> PERFORMING RESET." << endl;
 		
 		if( git_reset(repoManager_repo, temp_object, GIT_RESET_HARD, &temp_checkoutOptions) < 0 ){
@@ -514,12 +517,19 @@ void UnrealatedLauncherRepoManager::RepoManager_thread_update(){
 			cout << "-----	SORRY, THIS FEATURE HASN'T BEEN IMPLEMENTED PROPERLY." << endl;
 			return;
 		}
-
-		git_object_free(temp_object);
 	} // END - Merge / Reset.
 
 
+	// Obtaining Commit Summary:
+	git_commit *temp_commit = nullptr;
+	git_commit_lookup(&temp_commit, repoManager_repo, &objectID);
+	ref_window->launcher_updateSidebar_currentCommit(git_commit_summary(temp_commit));
+
+	git_commit_free(temp_commit);
+	git_object_free(temp_object);
+
 	git_repository_free(repoManager_repo);
+
 	if(git_libgit2_shutdown() < 0){
 		cout << "WARN:	Libgit2 failed to shutdown after operation." << endl << "GITERR:	" << giterr_last()->message << endl;
 	}

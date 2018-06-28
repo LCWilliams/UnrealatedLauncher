@@ -40,7 +40,7 @@ namespace UnrealatedLauncher{
 	class UnrealatedSettings;
 	class UnrealatedLauncherRepoManager;
 
-	class UnrealatedLauncherWindow : public Gtk::Window {
+class UnrealatedLauncherWindow : public Gtk::Window {
 	
 	public:
 	UnrealatedLauncherWindow();
@@ -65,7 +65,16 @@ namespace UnrealatedLauncher{
 
 	
 	bool repoManager_getRevealed(){	return v_repoManagerRevealer.get_reveal_child();	} // Returns the status of the revealer.
+	void launcher_updateSidebar_currentCommit(string p_stringToSet){ 
+		txt_utilitybar_currentCommit.set_text(p_stringToSet); 
+		txt_utilitybar_currentCommit.set_tooltip_text(p_stringToSet);
+		cout << "DEBUG:	Latest commit is: " << p_stringToSet << endl;
+	}
 	
+	void launcher_updateSidebar_showCurrentCommit(bool p_show){
+		txt_utilitybar_currentCommit.set_visible(p_show);
+		txt_utilitybar_currentCommit_label.set_visible(p_show);
+	}
 	
 	Glib::RefPtr<Gtk::Application> ref_application;
 	// Page Refs:
@@ -80,8 +89,7 @@ namespace UnrealatedLauncher{
 	// Buttons:
 	Gtk::MenuButton btn_Launcher;
 		// Utility bar QuickLaunch
-	Gtk::Button btn_QuickLaunch;
-	Gtk::LinkButton btn_link_help;
+//	Gtk::Button btn_QuickLaunch;
 	
 	// Menu Items
 	Gtk::CheckMenuItem menuItem_Launcher_ToggleUtilityBar;
@@ -101,7 +109,18 @@ namespace UnrealatedLauncher{
 	Gtk::Stack v_LauncherPageStack;
 	Gtk::StackSwitcher btn_LauncherPageStack; // The Stack Switcher Buttons.
 	Gtk::Revealer v_UtilityBarRevealer, v_settingsRevealer, v_repoManagerRevealer;
-	Gtk::Grid v_UtilityBar;
+
+	// Utility Bar:
+	Gtk::Grid v_UtilityBar, utilitybar_links;
+	Gtk::Frame utilityBar_links_frame;
+	Gtk::Label	txt_utilitybar_currentCommit_label,
+				txt_utilitybar_currentCommit;
+	
+	Gtk::LinkButton	btn_link_patreon,
+					btn_link_youtube,
+					btn_link_facebook,
+					btn_link_twitter,
+					btn_link_wiki;
 	
 	// Settings window;
 	UnrealatedSettings* ref_settings; // Used to call initial run functions.
@@ -165,6 +184,7 @@ class UnrealatedSettings : public Gtk::Grid{
 							page_engines_scrollWindow, 
 							page_market_scrollWindow, 
 							page_community_scrollWindow;
+		
 		Gtk::FlowBox	page_general_flowBox, 
 						page_projects_flowBox, 
 						page_engines_flowBox, 
@@ -184,7 +204,6 @@ class UnrealatedSettings : public Gtk::Grid{
 		
 		Gtk::CheckButton	btn_useSystemTheme, 
 							btn_utilityOpenOnDefault, 
-							btn_showLauncherRepoStatus, 
 							btn_showLatestCommit;
 		Gtk::ComboBoxText btn_defaultPage;
 		

@@ -138,8 +138,8 @@ void UnrealatedLauncher::Launcher_EngineTab::AddNewEngine(){
 	
 	// Run Installation:
 	if(ref_EngineAdd->EngineAdd_startInstallAfterFinished){
-//		newBlock->EngineBlock_install();	// Run install.
 		newBlock->InfoBarResponse(1); 		// Hide the info bar; and "continues" install.
+//		newBlock->EngineBlock_install();	// Above command runs installation, and deals with hiding the info bar prompting a "continuation".
 	}
 
 } // END - Add New Engine.
