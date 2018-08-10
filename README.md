@@ -62,3 +62,11 @@ These are planned, but whether or not they make it into the launcher are another
 - Project Blocks (project version of installed engines).
 - Marketplace Support.
 - Functioning Community tab.
+
+# KNOWN ISSUES:
+ - The theme is currently broken on newer versions of Gnome due to changes.  You can either edit the config ini (~/unrealatedLauncher/config.ini -> "useSystemTheme = false"), or use the slightly more up to date (quickly fixed up development) version!
+ 
+ # DOWNLOADS
+ 06_2018: https://drive.google.com/open?id=1bSw1allE8yvhlg2Rkn7UqHObDnUycQSq
+ 08_2018: https://drive.google.com/open?id=187d4fLzm1QftlYosU-_NaRPMM72IizYi
+ 
