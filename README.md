@@ -73,3 +73,7 @@ These are planned, but whether or not they make it into the launcher are another
  - 06_2018: https://drive.google.com/open?id=1bSw1allE8yvhlg2Rkn7UqHObDnUycQSq
  - 08_2018: https://drive.google.com/open?id=187d4fLzm1QftlYosU-_NaRPMM72IizYi
  
+ # SUPPORT:
+ You can support the development of the Unrealated Launcher on Patreon (Ko-Fi/BuyMeCoffee coming soon!):
+ **PATROEN:** https://www.patreon.com/UnrealatedLauncher
+.
